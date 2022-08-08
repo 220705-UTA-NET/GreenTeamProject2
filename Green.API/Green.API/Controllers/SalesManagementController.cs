@@ -13,7 +13,7 @@ namespace Green.API.Controllers
        private readonly ILogger<SalesManagementController> _logger;
 
         // Constructor
-        public SalesManagementController(IRepository repo, ILogger<MonstersController> logger)
+        public SalesManagementController(IRepository repo, ILogger<SalesManagementController> logger)
         {
             _repo = repo;
             _logger = logger;

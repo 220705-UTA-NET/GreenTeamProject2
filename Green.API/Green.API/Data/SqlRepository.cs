@@ -85,9 +85,9 @@ namespace Green.Api.Data
             return new StatusCodeResult(200);
 
         }
-        public async Task<IEnumerable<Products>> GetAllProductsAsync()
+        public async Task<IEnumerable<Product>> GetAllProductsAsync()
         {
-            List<Products> result = new();
+            List<Product> result = new();
 
             using SqlConnection connection = new(_connectionString);
             await connection.OpenAsync();
@@ -105,7 +105,7 @@ namespace Green.Api.Data
                 string productname = reader.GetString(1);
                 string description =  reader.GetString(2);
                 string artistname = reader.GetString(3);
-                decimal unitprice = reader.GetDecimal(4)
+                decimal unitprice = reader.GetDecimal(4);
 
 
                 Product tmpProduct = new Product(category,productname, description, artistname, unitprice);
@@ -137,10 +137,10 @@ namespace Green.Api.Data
             {
                 string name =  reader.GetString(0);
                 string email =  reader.GetString(1);
-                string? address = reader.IsDBNull(2) ? "" : reader.GetString(2)
-                DateTime invoicedate =  reader.GetString(3)
+                string? address = reader.IsDBNull(2) ? "" : reader.GetString(2);
+                DateTime invoicedate = reader.GetString(3);
                 string paymenttype =  reader.GetString(4);
-                decimal totalamount = reader.GetDecimal(5)
+                decimal totalamount = reader.GetDecimal(5);
 
 
                 SalesInvoice tmpSalesInvoice = new SalesInvoice(name,email,address,invoicedate,paymenttype,totalamount);

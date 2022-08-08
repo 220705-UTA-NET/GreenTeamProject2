@@ -7,7 +7,7 @@
         public int Quantity { get; set; }
         public decimal Totalamount { get; set;}
 
-        public Order(string productname,int quantity, decimal totalamount)
+        public InvoiceLine(string productname,int quantity, decimal totalamount)
         {
             Productname = productname;
             Quantity = quantity;
