@@ -10,7 +10,7 @@
 
         public Product(string category,string productname, string description, string artistname, decimal unitprice)
         {
-            Category = category
+            Category = category;
             Productname = productname;
             Description = description;
             Artistname = artistname;

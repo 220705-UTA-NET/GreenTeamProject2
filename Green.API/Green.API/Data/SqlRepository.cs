@@ -85,9 +85,9 @@ namespace Green.Api.Data
             return new StatusCodeResult(200);
 
         }
-        public async Task<IEnumerable<Products>> GetAllCustomersAsync()
+        public async Task<IEnumerable<Product>> GetAllProductsAsync()
         {
-            List<Products> result = new();
+            List<Product> result = new();
 
             using SqlConnection connection = new(_connectionString);
             await connection.OpenAsync();
@@ -105,7 +105,7 @@ namespace Green.Api.Data
                 string productname = reader.GetString(1);
                 string description =  reader.GetString(2);
                 string artistname = reader.GetString(3);
-                decimal unitprice = reader.GetDecimal(4)
+                decimal unitprice = reader.GetDecimal(4);
 
 
                 Product tmpProduct = new Product(category,productname, description, artistname, unitprice);
@@ -119,7 +119,7 @@ namespace Green.Api.Data
             return result;
         }
 
-        public async Task<IEnumerable<Products>> GetAllSalesInovicesAsync()
+        public async Task<IEnumerable<SalesInvoice>> GetAllSalesInvoicesAsync()
         {
             List<SalesInvoice> result = new();
 
@@ -137,10 +137,10 @@ namespace Green.Api.Data
             {
                 string name =  reader.GetString(0);
                 string email =  reader.GetString(1);
-                string? address = reader.IsDBNull(2) ? "" : reader.GetString(2)
-                DateTime invoicedate =  reader.GetString(3)
+                string? address = reader.IsDBNull(2) ? "" : reader.GetString(2);
+                DateTime invoicedate = reader.GetString(3);
                 string paymenttype =  reader.GetString(4);
-                decimal totalamount = reader.GetDecimal(5)
+                decimal totalamount = reader.GetDecimal(5);
 
 
                 SalesInvoice tmpSalesInvoice = new SalesInvoice(name,email,address,invoicedate,paymenttype,totalamount);
@@ -183,6 +183,64 @@ namespace Green.Api.Data
             _logger.LogInformation("Executed InsertSalesInvoiceAsync");
             return new StatusCodeResult(200);
 
+        }
+        public async Task<IEnumerable<InvoiceLine>> GetAllInvoiceLinesAsync()
+        {
+            List<SalesInvoice> result = new();
+
+            using SqlConnection connection = new(_connectionString);
+            await connection.OpenAsync();
+
+            string cmdText = "SELECT Products.product_name,quantity, total_amount FROM InvoiceLines JOIN Products on Products.product_id = InvoiceLines.product_id;";
+
+
+            using SqlCommand cmd = new(cmdText, connection);
+
+            using SqlDataReader reader = await cmd.ExecuteReaderAsync();
+
+            while (await reader.ReadAsync())
+            {
+                string productname =  reader.GetString(0);
+                int quantity = reader.GetInt32(1);
+                decimal totalamount = reader.GetDecimal(2);
+
+                InvoiceLine tmpInvoiceLine = new InvoiceLine(productname,quantity, totalamount);
+                result.Add(tmpInvoiceLine);
+            }
+
+            await connection.CloseAsync();
+
+            _logger.LogInformation("Executed GetAllInvoiceLinessAsync, returned {0} results", result.Count);
+
+            return result;
+        }
+        public async Task<StatusCodeResult> InsertInvoiceLineAsync(int productid, int quantity)
+        {
+            string cmdText = "INSERT INTO InvoiceLines ( product_id, quantity) VALUES (@productid, @quantity)";
+            SqlConnection connection = new(_connectionString);
+
+
+            using SqlCommand cmd = new(cmdText, connection);
+            cmd.Parameters.AddWithValue("@productid", productid);
+            cmd.Parameters.AddWithValue("@quantity", quantity);
+
+
+            try
+            {
+                await connection.OpenAsync();
+                await cmd.ExecuteNonQueryAsync();
+            }
+            catch (Exception e)
+            {
+
+                _logger.LogError("Error in InsertInvoiceLine while trying to open a connection or execute non query");
+                _logger.LogInformation(e.Message);
+                return new StatusCodeResult(500);
+            }
+
+            await connection.CloseAsync();
+            _logger.LogInformation("Executed InsertInvoiceLineAsync");
+            return new StatusCodeResult(200);
         }
     }
 }

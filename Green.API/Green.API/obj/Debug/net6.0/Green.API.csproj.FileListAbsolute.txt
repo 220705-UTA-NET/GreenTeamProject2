@@ -1,0 +1,7 @@
+C:\Revature\220705\P2Green\GreenTeamProject2\Green.API\Green.API\obj\Debug\net6.0\Green.API.csproj.AssemblyReference.cache
+C:\Revature\220705\P2Green\GreenTeamProject2\Green.API\Green.API\obj\Debug\net6.0\Green.API.GeneratedMSBuildEditorConfig.editorconfig
+C:\Revature\220705\P2Green\GreenTeamProject2\Green.API\Green.API\obj\Debug\net6.0\Green.API.AssemblyInfoInputs.cache
+C:\Revature\220705\P2Green\GreenTeamProject2\Green.API\Green.API\obj\Debug\net6.0\Green.API.AssemblyInfo.cs
+C:\Revature\220705\P2Green\GreenTeamProject2\Green.API\Green.API\obj\Debug\net6.0\Green.API.csproj.CoreCompileInputs.cache
+C:\Revature\220705\P2Green\GreenTeamProject2\Green.API\Green.API\obj\Debug\net6.0\Green.API.MvcApplicationPartsAssemblyInfo.cs
+C:\Revature\220705\P2Green\GreenTeamProject2\Green.API\Green.API\obj\Debug\net6.0\Green.API.MvcApplicationPartsAssemblyInfo.cache

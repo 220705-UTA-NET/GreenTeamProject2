@@ -15,7 +15,6 @@
 
   <ItemGroup>
     <Folder Include="Data\" />
-    <Folder Include="DTOs\Authentication\" />
     <Folder Include="Migrations\" />
     <Folder Include="Services\Account\" />
   </ItemGroup>
