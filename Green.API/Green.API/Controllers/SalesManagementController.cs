@@ -34,5 +34,23 @@ namespace Green.API.Controllers
             return customers.ToList();
 
         }
+
+
+        [HttpPost]
+        public async Task<ActionResult> PostCustomer(string username, string password)
+        {
+            try
+            {
+                StatusCodeResult rep = await _repo.InsertCustomerAsync(username,password); 
+                if (rep.StatusCode == 500) return StatusCode(500, "Monster could not be updated!");
+            }
+            catch (Exception e)
+            {
+                _logger.LogInformation("Error encountered: connecting to database in UpdateMonster");
+                _logger.LogError(e.Message);
+                return StatusCode(500, "Monster could not be inserted!");
+            }
+            return StatusCode(200);
+        }
     }
 }

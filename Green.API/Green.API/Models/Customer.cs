@@ -9,22 +9,17 @@
         public string? Address { get; set; }
         public int PhoneNumber { get; set; }
         
-        public DateOnly BirthDate { get; set; }
-        public DateOnly MemberSince { get; set; } 
+
 
         
-        public Customer(string username, string password, string email, string address, int phonenumber, DateOnly birthdate, DateOnly membersince) 
+        public Customer(string username, string password, string email, string address, int phonenumber) 
         {
             Username = username;
             Password = password;
             Email = email;
             Address = address;
             PhoneNumber = phonenumber;
-            BirthDate = birthdate;
-            MemberSince = membersince;
-
-
-           
+                       
         }
         
     }
