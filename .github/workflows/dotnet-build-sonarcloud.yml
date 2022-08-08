@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: GreenAPI
+        working-directory: GreenAPI/GreenAPI
     steps:
     - uses: actions/checkout@v3
     - name: Setup .NET
