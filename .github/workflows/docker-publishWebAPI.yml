@@ -11,7 +11,7 @@ on:
       - 'main'
   pull_request:
     branches: [ "main", "dev"]
-
+  workflow_dispatch:
 env:
   # Use docker.io for Docker Hub if empty
   REGISTRY: ghcr.io
