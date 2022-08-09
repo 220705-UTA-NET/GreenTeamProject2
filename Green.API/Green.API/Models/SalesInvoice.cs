@@ -1,4 +1,6 @@
-﻿namespace Green.API.Models
+﻿using System;
+
+namespace Green.API.Models
 {
     public class SalesInvoice
     {
