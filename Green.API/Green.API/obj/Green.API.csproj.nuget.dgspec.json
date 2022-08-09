@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Revature\\220705\\P2Green\\GreenTeamProject2\\Green.API\\Green.API\\Green.API.csproj": {}
+    "C:\\Users\\brand\\Revature\\GreenTeamProject2\\Green.API\\Green.API\\Green.API.csproj": {}
   },
   "projects": {
-    "C:\\Revature\\220705\\P2Green\\GreenTeamProject2\\Green.API\\Green.API\\Green.API.csproj": {
+    "C:\\Users\\brand\\Revature\\GreenTeamProject2\\Green.API\\Green.API\\Green.API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Revature\\220705\\P2Green\\GreenTeamProject2\\Green.API\\Green.API\\Green.API.csproj",
+        "projectUniqueName": "C:\\Users\\brand\\Revature\\GreenTeamProject2\\Green.API\\Green.API\\Green.API.csproj",
         "projectName": "Green.API",
-        "projectPath": "C:\\Revature\\220705\\P2Green\\GreenTeamProject2\\Green.API\\Green.API\\Green.API.csproj",
-        "packagesPath": "C:\\Users\\danie\\.nuget\\packages\\",
-        "outputPath": "C:\\Revature\\220705\\P2Green\\GreenTeamProject2\\Green.API\\Green.API\\obj\\",
+        "projectPath": "C:\\Users\\brand\\Revature\\GreenTeamProject2\\Green.API\\Green.API\\Green.API.csproj",
+        "packagesPath": "C:\\Users\\brand\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\brand\\Revature\\GreenTeamProject2\\Green.API\\Green.API\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\danie\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\brand\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -47,6 +47,10 @@
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.2.3, )"
+            },
+            "System.Data.SqlClient": {
+              "target": "Package",
+              "version": "[4.8.3, )"
             }
           },
           "imports": [

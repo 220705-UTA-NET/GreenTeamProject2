@@ -19,7 +19,36 @@ namespace Green.API.Controllers
             _logger = logger;
         }
 
-        [HttpGet]
+        [HttpGet("{username}/{password}")]
+        public async Task<ActionResult> GetExistingCustomer(string username, string password)
+        {
+
+            try
+            {
+                
+                StatusCodeResult st = await _repo.GetExistingCustomerAsync(username, password);
+                _logger.LogInformation(st.StatusCode.ToString());
+                
+                if (st.StatusCode != 200) return StatusCode(500, "User not found");
+
+            }
+            catch (Exception e)
+            {
+
+                _logger.LogError(e, e.Message);
+                return StatusCode(500);
+            }
+
+            _logger.LogInformation("Executed GetExistingCustomer");
+            return StatusCode(200, "User found");
+        }
+
+
+        // Two ways to access the endpoint
+        // [HttpGet("/getallcustomers")] -> http://localhost:9999/getallcustomers
+        // [HttpGet("getallcustomers")]  -> http://localhost:9999/SalesManagement/getallcustomers
+
+        [HttpGet("getallcustomers")]
         public async Task<ActionResult<IEnumerable<Customer>>> GetAllCustomers()
         {
             IEnumerable<Customer> customers;
@@ -27,6 +56,7 @@ namespace Green.API.Controllers
             try
             {
                 customers = await _repo.GetAllCustomersAsync();
+                if (customers == null || !customers.Any()) return BadRequest(500);
             }
             catch (Exception e)
             {
@@ -37,7 +67,7 @@ namespace Green.API.Controllers
             return customers.ToList();
 
         }
-        [HttpGet]
+        [HttpGet("getallproducts")]
         public async Task<ActionResult<IEnumerable<Product>>> GetAllProducts()
         {
             IEnumerable<Product> products;
@@ -55,7 +85,7 @@ namespace Green.API.Controllers
             return products.ToList();
 
         }
-        [HttpGet]
+        [HttpGet("getallsalesinvoices")]
         public async Task<ActionResult<IEnumerable<SalesInvoice>>> GetAllSalesInvoices()
         {
             IEnumerable<SalesInvoice> salesinvoices;
@@ -73,7 +103,7 @@ namespace Green.API.Controllers
             return salesinvoices.ToList();
         }
 
-        [HttpGet]
+        [HttpGet("getallinvoiceslines")]
         public async Task<ActionResult<IEnumerable<InvoiceLine>>> GetAllInvoiceLines()
         {
             IEnumerable<InvoiceLine> invoicelines;
@@ -93,12 +123,12 @@ namespace Green.API.Controllers
         
 
 
-        [HttpPost]
-        public async Task<ActionResult> PostCustomer(string username, string password)
+        [HttpPost("{username}/{password}/{email}")]
+        public async Task<ActionResult> PostCustomer(string username, string password, string email)// [FromBody]
         {
             try
             {
-                StatusCodeResult rep = await _repo.InsertCustomerAsync(username,password); 
+                StatusCodeResult rep = await _repo.InsertCustomerAsync(username,password, email); 
                 if (rep.StatusCode == 500) return StatusCode(500, "Customer could not be inserted!");
             }
             catch (Exception e)
@@ -110,12 +140,12 @@ namespace Green.API.Controllers
             return StatusCode(200);
         }
        
-        [HttpPost]
+        [HttpPost("{invoicedate}/{customerid}/{paymenttype}/{totalamount}")]
         public async Task<ActionResult> PostSalesInvoice(DateTime invoicedate, int customerid, string paymenttype, decimal totalamount)
         {
              try
             {
-                StatusCodeResult rep = await _repo.InsertSalesInvoiceAsync(invoicedate,customerid,paymenttype,totalamount); 
+                StatusCodeResult rep = await _repo.InsertSalesInvoiceAsync(invoicedate, customerid, paymenttype, totalamount); 
                 if (rep.StatusCode == 500) return StatusCode(500, "SalesInvoice could not be inserted!");
             }
             catch (Exception e)
@@ -126,7 +156,8 @@ namespace Green.API.Controllers
             }
             return StatusCode(200);
         }
-        [HttpPost]
+
+        [HttpPost("{productid}/{quantity}")]
         public async Task<ActionResult> PostInvoiceLine(int productid, int quantity)
         {
             try

@@ -1,7 +1,9 @@
+using Green.Api.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-string connectionString = File.ReadAllText("C:/Revature/220705/connectionstrings/P2.txt");
+string connectionString = File.ReadAllText("C:/Users/brand/connection.txt");
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
