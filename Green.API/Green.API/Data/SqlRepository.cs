@@ -1,8 +1,11 @@
 
+using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Green.API.Models;
 using System.Data.SqlClient;
+using System.Threading.Tasks;
 
 namespace Green.Api.Data
 {
@@ -203,7 +206,6 @@ namespace Green.Api.Data
             }
             catch (Exception e)
             {
-
                 _logger.LogError("Error in InsertSalesInvoice while trying to open a connection or execute non query");
                 _logger.LogInformation(e.Message);
                 return new StatusCodeResult(500);
