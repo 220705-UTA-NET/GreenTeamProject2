@@ -2,22 +2,19 @@
 {
     public class Product
     {
-        public Guid Id { get; set; } // item id
+        public string Category { get; set; }
+        public string Productname { get; set; }
+        public string Description { get; set; }
+        public string Artistname { get; set; }
+        public decimal Unitprice { get; set; }
 
-        public string? Name { get; set; } // item name
-        public decimal Price { get; set; } // item price
-        public string? Description { get; set; } // item description
-        public string? Artist { get; set; } //artist name 
-        public int Quantity { get; set; } //item quantity
-
-        public Product(Guid id, string? name, decimal price, string? description, string? artist, int quantity)
+        public Product(string category, string productname, string description, string artistname, decimal unitprice)
         {
-            Id = id;
-            Name = name;
-            Price = price;
+            Category = category;
+            Productname = productname;
             Description = description;
-            Artist = artist;
-            Quantity = quantity;
+            Artistname = artistname;
+            Unitprice = unitprice;
         }
     }
 }
