@@ -43,7 +43,7 @@ jobs:
           context: ./Green.API
           file: ./Green.API/Green.API/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/WebAPI:latest
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/cccxapi:latest
       -
         name: Build and push
         uses: docker/build-push-action@v2
@@ -51,4 +51,4 @@ jobs:
           context: ./client
           file: ./client/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/CCCX:latest
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/cccx:latest
