@@ -6,6 +6,7 @@ namespace Green.Api.Data
     public interface IRepository
     {
         Task<IEnumerable<Customer>> GetAllCustomersAsync();
+        Task<StatusCodeResult> GetExistingCustomerAsync(string username, string password);
         Task<StatusCodeResult> InsertCustomerAsync(string username, string password, string email);
         Task<IEnumerable<Product>> GetAllProductsAsync();
         Task<IEnumerable<SalesInvoice>> GetAllSalesInvoicesAsync();

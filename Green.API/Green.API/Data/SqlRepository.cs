@@ -17,6 +17,38 @@ namespace Green.Api.Data
             _logger = logger;
         }
 
+        public async Task<StatusCodeResult> GetExistingCustomerAsync(string username, string password)
+        {
+            _logger.LogInformation(username + " " + password);
+            using SqlConnection connection = new(_connectionString);
+
+            await connection.OpenAsync();
+
+            string cmdText = "SELECT * FROM Customers WHERE username=@Username AND password=@Password;";
+            
+            using SqlCommand cmd = new(cmdText, connection);
+            cmd.Parameters.AddWithValue("@Username", username);
+            cmd.Parameters.AddWithValue("@Password", password);
+
+            using SqlDataReader reader = await cmd.ExecuteReaderAsync();
+
+            try
+            {
+                if(!await reader.ReadAsync()) return new StatusCodeResult(500);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError("Error in GetExistingCustomerAsync while trying to open a connection or execute non query");
+                _logger.LogError(e.Message);
+                await connection.CloseAsync();
+                return new StatusCodeResult(500);
+            }
+
+            await connection.CloseAsync();
+            _logger.LogInformation("Executed GetExistingCustomerAsync");
+            return new StatusCodeResult(200);
+        }
+
         public async Task<IEnumerable<Customer>> GetAllCustomersAsync()
         {
             List<Customer> result = new();
@@ -24,7 +56,7 @@ namespace Green.Api.Data
             using SqlConnection connection = new(_connectionString);
             await connection.OpenAsync();
 
-            string cmdText = "SELECT customer_id, name FROM Customers;";
+            string cmdText = "SELECT username, name, address, phone, email, password FROM Customers;";
 
             using SqlCommand cmd = new(cmdText, connection);
 
@@ -32,26 +64,17 @@ namespace Green.Api.Data
 
             while (await reader.ReadAsync())
             {
+                
+                string username = reader.GetString(0);
+                string name = reader.GetString(1);
+                string? address = reader.IsDBNull(2) ? "" : reader.GetString(2);
+                string? phonenumber = reader.IsDBNull(3) ? "" : reader.GetString(3);
+                string email = reader.GetString(4);
+                string? password = reader.IsDBNull(5) ? "" : reader.GetString(5);
 
-                try
-                {
-                    // Customers Table
-                    // customer_id = 0, username = 1, password = 2, name = 3, address = 4, phone = 5, email = 6
-                    string username = reader.GetString(1);
-                    string password = reader.GetString(2);
-                    string email = reader.GetString(6);
-                    string name =  reader.GetString(3);
-                    string? address = reader.IsDBNull(4) ? "" : reader.GetString(4);
-                    string phonenumber = reader.GetString(5);
+                Customer tmpCustomer = new(username, password, email, name, address, phonenumber);
+                result.Add(tmpCustomer);
 
-                    Customer tmpCustomer = new(username, password, email, name, address, phonenumber);
-                    result.Add(tmpCustomer);
-
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError("ERROR is: {0}", ex.Message);
-                }
             }
 
             await connection.CloseAsync();

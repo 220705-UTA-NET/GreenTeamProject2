@@ -19,6 +19,31 @@ namespace Green.API.Controllers
             _logger = logger;
         }
 
+        [HttpGet("{username}/{password}")]
+        public async Task<ActionResult> GetExistingCustomer(string username, string password)
+        {
+
+            try
+            {
+                
+                StatusCodeResult st = await _repo.GetExistingCustomerAsync(username, password);
+                _logger.LogInformation(st.StatusCode.ToString());
+                
+                if (st.StatusCode != 200) return StatusCode(500, "User not found");
+
+            }
+            catch (Exception e)
+            {
+
+                _logger.LogError(e, e.Message);
+                return StatusCode(500);
+            }
+
+            _logger.LogInformation("Executed GetExistingCustomer");
+            return StatusCode(200, "User found");
+        }
+
+
         // Two ways to access the endpoint
         // [HttpGet("/getallcustomers")] -> http://localhost:9999/getallcustomers
         // [HttpGet("getallcustomers")]  -> http://localhost:9999/SalesManagement/getallcustomers
