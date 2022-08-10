@@ -3,7 +3,7 @@ using Green.Api.Data;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-string connectionString = Environment.GetEnvironmentVariable("dbURL") ?? "didn't connect!!!";
+string connectionString = Environment.GetEnvironmentVariable("dbURL", EnvironmentVariableTarget.Process) ?? "didn't connect!!!";
     //File.ReadAllText("C:/Users/brand/connection.txt");
 
 builder.Services.AddControllers();
@@ -18,7 +18,7 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI(p => { p.RoutePrefix = String.Empty; });
+    app.UseSwaggerUI(p => { p.SwaggerEndpoint("/swagger/v1/swagger.json", "CCCX API"); p.RoutePrefix = String.Empty; });
 }
 
 app.UseHttpsRedirection();
