@@ -3,7 +3,7 @@ using Green.Api.Data;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-string connectionString = Environment.GetEnvironmentVariable("dbURL") ?? String.Empty;
+string connectionString = Environment.GetEnvironmentVariable("dbURL", EnvironmentVariableTarget.Process) ?? "didn't connect!!!";
     //File.ReadAllText("C:/Users/brand/connection.txt");
 
 builder.Services.AddControllers();
