@@ -3,7 +3,7 @@ using Green.Api.Data;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-string connectionString = Environment.GetEnvironmentVariable("SQLAZURECONNSTR_dbURL", EnvironmentVariableTarget.Process) ?? "didn't connect!!!";
+string connectionString = builder.Configuration.GetConnectionString("SQLAZURECONNSTR_dbURL") ?? "didn't connect!!!";
     //File.ReadAllText("C:/Users/brand/connection.txt");
 
 builder.Services.AddControllers();
