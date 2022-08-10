@@ -24,6 +24,12 @@ namespace Green.API.Controllers
             _logger = logger;
         }
 
+        public ActionResult Index()
+        {
+            // Add action logic here
+            return Content("<h1>Hello</h1>");
+        }
+
         [HttpGet("{username}/{password}")]
         public async Task<ActionResult> GetExistingCustomer(string username, string password)
         {
