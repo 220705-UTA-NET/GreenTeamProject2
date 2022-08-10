@@ -3,7 +3,7 @@ using Green.Api.Data;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-string connectionString = builder.Configuration.GetConnectionString("SQLCONNSTR_") ?? String.Empty;
+string connectionString = Environment.GetEnvironmentVariable("dbURL") ?? String.Empty;
     //File.ReadAllText("C:/Users/brand/connection.txt");
 
 builder.Services.AddControllers();
