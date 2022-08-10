@@ -69,7 +69,7 @@ namespace Green.API.Controllers
             try
             {
                 customers = await _repo.GetAllCustomersAsync();
-                if (customers == null || !customers.Any()) return BadRequest(500);
+                //if (customers == null || !customers.Any()) return BadRequest(500);
             }
             catch (Exception e)
             {
