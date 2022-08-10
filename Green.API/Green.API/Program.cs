@@ -4,7 +4,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 string connectionString = builder.Configuration.GetConnectionString("dbURL");
-    //File.ReadAllText("C:/Users/brand/connection.txt");
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -15,11 +14,12 @@ builder.Services.AddSingleton<IRepository>(sp => new SqlRepository(connectionStr
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
+// if (app.Environment.IsDevelopment())
+// {
+// p => { p.SwaggerEndpoint("/swagger/v1/swagger.json", "CCCX API"); p.RoutePrefix = String.Empty; }
     app.UseSwagger();
-    app.UseSwaggerUI(p => { p.SwaggerEndpoint("/swagger/v1/swagger.json", "CCCX API"); p.RoutePrefix = String.Empty; });
-}
+    app.UseSwaggerUI();
+// }
 
 app.UseHttpsRedirection();
 
