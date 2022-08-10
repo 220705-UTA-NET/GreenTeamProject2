@@ -1,10 +1,11 @@
 
+using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Green.API.Models;
 using System.Data.SqlClient;
-
-
+using System.Threading.Tasks;
 
 namespace Green.Api.Data
 {
@@ -19,6 +20,38 @@ namespace Green.Api.Data
             _logger = logger;
         }
 
+        public async Task<StatusCodeResult> GetExistingCustomerAsync(string username, string password)
+        {
+            _logger.LogInformation(username + " " + password);
+            using SqlConnection connection = new(_connectionString);
+
+            await connection.OpenAsync();
+
+            string cmdText = "SELECT * FROM Customers WHERE username=@Username AND password=@Password;";
+            
+            using SqlCommand cmd = new(cmdText, connection);
+            cmd.Parameters.AddWithValue("@Username", username);
+            cmd.Parameters.AddWithValue("@Password", password);
+
+            using SqlDataReader reader = await cmd.ExecuteReaderAsync();
+
+            try
+            {
+                if(!await reader.ReadAsync()) return new StatusCodeResult(500);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError("Error in GetExistingCustomerAsync while trying to open a connection or execute non query");
+                _logger.LogError(e.Message);
+                await connection.CloseAsync();
+                return new StatusCodeResult(500);
+            }
+
+            await connection.CloseAsync();
+            _logger.LogInformation("Executed GetExistingCustomerAsync");
+            return new StatusCodeResult(200);
+        }
+
         public async Task<IEnumerable<Customer>> GetAllCustomersAsync()
         {
             List<Customer> result = new();
@@ -26,8 +59,7 @@ namespace Green.Api.Data
             using SqlConnection connection = new(_connectionString);
             await connection.OpenAsync();
 
-            string cmdText = "SELECT username, password, email, name, address, phonenumber FROM Customers;";
-
+            string cmdText = "SELECT username, name, address, phone, email, password FROM Customers;";
 
             using SqlCommand cmd = new(cmdText, connection);
 
@@ -35,16 +67,17 @@ namespace Green.Api.Data
 
             while (await reader.ReadAsync())
             {
+                
                 string username = reader.GetString(0);
-                string password = reader.GetString(1);
-                string email = reader.GetString(2);
-                string name =  reader.GetString(3);
-                string? address = reader.IsDBNull(4) ? "" : reader.GetString(4);
-                int phonenumber = reader.GetInt32(5);
+                string name = reader.GetString(1);
+                string? address = reader.IsDBNull(2) ? "" : reader.GetString(2);
+                string? phonenumber = reader.IsDBNull(3) ? "" : reader.GetString(3);
+                string email = reader.GetString(4);
+                string? password = reader.IsDBNull(5) ? "" : reader.GetString(5);
 
-
-                Customer tmpCustomer = new Customer(username, password, email, name, address, phonenumber);
+                Customer tmpCustomer = new(username, password, email, name, address, phonenumber);
                 result.Add(tmpCustomer);
+
             }
 
             await connection.CloseAsync();
@@ -57,7 +90,7 @@ namespace Green.Api.Data
 
         public async Task<StatusCodeResult> InsertCustomerAsync(string username, string password, string email)
         {
-            string cmdText = "INSERT INTO Customer (username,password, email) VALUES (@username, @password, @email)";
+            string cmdText = "INSERT INTO Customers (username, password, email) VALUES (@username, @password, @email)";
             SqlConnection connection = new(_connectionString);
 
 
@@ -92,7 +125,7 @@ namespace Green.Api.Data
             using SqlConnection connection = new(_connectionString);
             await connection.OpenAsync();
 
-            string cmdText = "SELECT category, product_name, description, Artists.artist_name, unit_price FROM Products JOIN Artist on Products.artist_id = Artists.artist_id;";
+            string cmdText = "SELECT product_name, description, unit_price FROM Products;";
 
 
             using SqlCommand cmd = new(cmdText, connection);
@@ -108,7 +141,7 @@ namespace Green.Api.Data
                 decimal unitprice = reader.GetDecimal(4);
 
 
-                Product tmpProduct = new Product(category,productname, description, artistname, unitprice);
+                Product tmpProduct = new(category,productname, description, artistname, unitprice);
                 result.Add(tmpProduct);
             }
 
@@ -126,7 +159,7 @@ namespace Green.Api.Data
             using SqlConnection connection = new(_connectionString);
             await connection.OpenAsync();
 
-            string cmdText = "SELECT Customers.name, Customer.email, Customers.address, invoice_date, payment_type, total_amount FROM SalesInvoices JOIN Customers on Customers.customer_id = SalesInvoices.custormer_id;";
+            string cmdText = "SELECT Customers.name, Customers.email, Customers.address, invoice_date, payment_type, total_amount FROM SalesInvoices JOIN Customers on Customers.customer_id = SalesInvoices.custormer_id;";
 
 
             using SqlCommand cmd = new(cmdText, connection);
@@ -138,12 +171,12 @@ namespace Green.Api.Data
                 string name =  reader.GetString(0);
                 string email =  reader.GetString(1);
                 string? address = reader.IsDBNull(2) ? "" : reader.GetString(2);
-                DateTime invoicedate = reader.GetString(3);
+                DateTime invoicedate = reader.GetDateTime(3);
                 string paymenttype =  reader.GetString(4);
                 decimal totalamount = reader.GetDecimal(5);
 
 
-                SalesInvoice tmpSalesInvoice = new SalesInvoice(name,email,address,invoicedate,paymenttype,totalamount);
+                SalesInvoice tmpSalesInvoice = new(name,email,address,invoicedate,paymenttype,totalamount);
                 result.Add(tmpSalesInvoice);
             }
 
@@ -155,7 +188,7 @@ namespace Green.Api.Data
         }
         public async Task<StatusCodeResult> InsertSalesInvoiceAsync(DateTime invoicedate, int customerid, string paymenttype, decimal totalamount)
         {
-            string cmdText = "INSERT INTO SalesInvoices ( invoice_date, customer_id, payment_type, total_amount) VALUES (@invoicedate, @customerid, @paymenttype, @totalamount)";
+            string cmdText = "INSERT INTO SalesInvoices ( invoice_date, customer_id, payment_type, total_amount) VALUES (@invoicedate, @customerid, @paymenttype, @totalamount);";
             SqlConnection connection = new(_connectionString);
 
 
@@ -173,7 +206,6 @@ namespace Green.Api.Data
             }
             catch (Exception e)
             {
-
                 _logger.LogError("Error in InsertSalesInvoice while trying to open a connection or execute non query");
                 _logger.LogInformation(e.Message);
                 return new StatusCodeResult(500);
@@ -186,13 +218,12 @@ namespace Green.Api.Data
         }
         public async Task<IEnumerable<InvoiceLine>> GetAllInvoiceLinesAsync()
         {
-            List<SalesInvoice> result = new();
+            List<InvoiceLine> result = new();
 
             using SqlConnection connection = new(_connectionString);
             await connection.OpenAsync();
 
-            string cmdText = "SELECT Products.product_name,quantity, total_amount FROM InvoiceLines JOIN Products on Products.product_id = InvoiceLines.product_id;";
-
+            string cmdText = "SELECT Products.product_name, quantity, total_amount FROM InvoiceLines JOIN Products on Products.product_id = InvoiceLines.product_id;";
 
             using SqlCommand cmd = new(cmdText, connection);
 
@@ -204,7 +235,8 @@ namespace Green.Api.Data
                 int quantity = reader.GetInt32(1);
                 decimal totalamount = reader.GetDecimal(2);
 
-                InvoiceLine tmpInvoiceLine = new InvoiceLine(productname,quantity, totalamount);
+                InvoiceLine tmpInvoiceLine = new(productname, quantity, totalamount);
+
                 result.Add(tmpInvoiceLine);
             }
 
@@ -216,7 +248,7 @@ namespace Green.Api.Data
         }
         public async Task<StatusCodeResult> InsertInvoiceLineAsync(int productid, int quantity)
         {
-            string cmdText = "INSERT INTO InvoiceLines ( product_id, quantity) VALUES (@productid, @quantity)";
+            string cmdText = "INSERT INTO InvoiceLines (product_id, quantity) VALUES (@productid, @quantity)";
             SqlConnection connection = new(_connectionString);
 
 

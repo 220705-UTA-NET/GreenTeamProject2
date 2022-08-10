@@ -1,0 +1,32 @@
+﻿<Properties StartupConfiguration="{38E78592-6816-4C00-874D-4BA8DADF8A54}|Default">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.ItemProperties.Green.API PreferredExecutionTarget="/Applications/Google Chrome.app" />
+  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Green.API/Data/SqlRepository.cs">
+    <Files>
+      <File FileName="Green.API/Controllers/SalesManagementController.cs" Line="1" Column="1" />
+      <File FileName="Green.API/Program.cs" Line="12" Column="35" />
+      <File FileName="Green.API/Data/SqlRepository.cs" Line="58" Column="10" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="Green.API" expanded="True">
+            <Node name="Green.API" expanded="True">
+              <Node name="Controllers" expanded="True" />
+              <Node name="Data" expanded="True" />
+              <Node name="Models" expanded="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+      <Pad Id="MonoDevelop.Debugger.WatchPad">
+        <State />
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+</Properties>
