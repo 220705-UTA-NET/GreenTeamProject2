@@ -14,9 +14,9 @@ builder.Services.AddSingleton<IRepository>(sp => new SqlRepository(connectionStr
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+
 // if (app.Environment.IsDevelopment())
 // {
-// p => { p.SwaggerEndpoint("/swagger/v1/swagger.json", "CCCX API"); p.RoutePrefix = String.Empty; }
     app.UseSwagger();
     app.UseSwaggerUI();
 // }
