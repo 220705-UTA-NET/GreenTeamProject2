@@ -24,6 +24,11 @@ namespace Green.API.Controllers
             _logger = logger;
         }
 
+        public ActionResult Index()
+        {
+           return Content("Connected to SalesManagement Controller");
+        }
+
         [HttpGet("{username}/{password}")]
         public async Task<ActionResult> GetExistingCustomer(string username, string password)
         {
@@ -61,7 +66,7 @@ namespace Green.API.Controllers
             try
             {
                 customers = await _repo.GetAllCustomersAsync();
-                if (customers == null || !customers.Any()) return BadRequest(500);
+                //if (customers == null || !customers.Any()) return BadRequest(500);
             }
             catch (Exception e)
             {
