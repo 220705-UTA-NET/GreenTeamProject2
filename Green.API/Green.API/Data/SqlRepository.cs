@@ -23,7 +23,7 @@ namespace Green.Api.Data
             using SqlConnection connection = new(_connectionString);
             await connection.OpenAsync();
 
-            string cmdText = "SELECT customer_id, name FROM Customers;";
+            string cmdText = "SELECT * FROM Customers;";
 
             using SqlCommand cmd = new(cmdText, connection);
 
