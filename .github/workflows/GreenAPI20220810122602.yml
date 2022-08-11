@@ -2,7 +2,7 @@ name: Build and deploy .NET Core app to Windows WebApp GreenAPI20220810122602
 on:
   push:
     branches:
-    - develop
+    - main
 env:
   AZURE_WEBAPP_NAME: GreenAPI20220810122602
   AZURE_WEBAPP_PACKAGE_PATH: Green.API/publish
