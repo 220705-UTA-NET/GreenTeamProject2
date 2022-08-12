@@ -125,7 +125,7 @@ namespace Green.Api.Data
             using SqlConnection connection = new(_connectionString);
             await connection.OpenAsync();
 
-            string cmdText = "SELECT product_name, description, unit_price FROM Products;";
+            string cmdText = "SELECT product_name, description, category_id, unit_price, artist_id FROM Products;";
 
 
             using SqlCommand cmd = new(cmdText, connection);
@@ -134,14 +134,13 @@ namespace Green.Api.Data
 
             while (await reader.ReadAsync())
             {
-                string category =  reader.GetString(0);
-                string productname = reader.GetString(1);
-                string description =  reader.GetString(2);
-                string artistname = reader.GetString(3);
-                decimal unitprice = reader.GetDecimal(4);
+                string productname = reader.GetString(0);
+                string description =  reader.GetString(1);
+                string category =  reader.GetString(2);
+                decimal unitprice = reader.GetDecimal(3);
+                string artistname = reader.GetString(4);
 
-
-                Product tmpProduct = new(category,productname, description, artistname, unitprice);
+                Product tmpProduct = new(category, productname, description, artistname, unitprice);
                 result.Add(tmpProduct);
             }
 
@@ -159,7 +158,7 @@ namespace Green.Api.Data
             using SqlConnection connection = new(_connectionString);
             await connection.OpenAsync();
 
-            string cmdText = "SELECT Customers.name, Customers.email, Customers.address, invoice_date, payment_type, total_amount FROM SalesInvoices JOIN Customers on Customers.customer_id = SalesInvoices.custormer_id;";
+            string cmdText = "SELECT Customers.name, Customers.email, Customers.address, invoice_date, payment_type, total_amount FROM SalesInvoices JOIN Customers on Customers.customer_id = SalesInvoices.customer_id;";
 
 
             using SqlCommand cmd = new(cmdText, connection);
@@ -176,7 +175,7 @@ namespace Green.Api.Data
                 decimal totalamount = reader.GetDecimal(5);
 
 
-                SalesInvoice tmpSalesInvoice = new(name,email,address,invoicedate,paymenttype,totalamount);
+                SalesInvoice tmpSalesInvoice = new(name, email, address, invoicedate, paymenttype, totalamount);
                 result.Add(tmpSalesInvoice);
             }
 
@@ -216,46 +215,54 @@ namespace Green.Api.Data
             return new StatusCodeResult(200);
 
         }
-        public async Task<IEnumerable<InvoiceLine>> GetAllInvoiceLinesAsync()
+
+
+       
+
+
+
+        //public async Task<IEnumerable<InvoiceLine>> GetAllInvoiceLinesAsync()// doesn't get correct ammount
+        //{
+        //    List<InvoiceLine> result = new();
+
+        //    using SqlConnection connection = new(_connectionString);
+        //    await connection.OpenAsync();
+
+        //    string cmdText = "SELECT Products.product_name, quantity, amount FROM InvoiceLines JOIN Products on Products.product_id = InvoiceLines.product_id;";
+
+        //    using SqlCommand cmd = new(cmdText, connection);
+
+        //    using SqlDataReader reader = await cmd.ExecuteReaderAsync();
+
+        //    while (await reader.ReadAsync())
+        //    {
+        //        string productname =  reader.GetString(0);
+        //        int quantity = reader.GetInt32(1);
+        //        decimal totalamount = reader.GetDecimal(2);
+
+        //        InvoiceLine tmpInvoiceLine = new(productname, quantity, totalamount);
+
+        //        result.Add(tmpInvoiceLine);
+        //    }
+
+        //    await connection.CloseAsync();
+
+        //    _logger.LogInformation("Executed GetAllInvoiceLinessAsync, returned {0} results", result.Count);
+
+        //    return result;
+        //}
+
+
+        public async Task<StatusCodeResult> InsertInvoiceLineAsync(int invoice_number, int productid, int quantity, decimal amount)
         {
-            List<InvoiceLine> result = new();
-
-            using SqlConnection connection = new(_connectionString);
-            await connection.OpenAsync();
-
-            string cmdText = "SELECT Products.product_name, quantity, total_amount FROM InvoiceLines JOIN Products on Products.product_id = InvoiceLines.product_id;";
-
-            using SqlCommand cmd = new(cmdText, connection);
-
-            using SqlDataReader reader = await cmd.ExecuteReaderAsync();
-
-            while (await reader.ReadAsync())
-            {
-                string productname =  reader.GetString(0);
-                int quantity = reader.GetInt32(1);
-                decimal totalamount = reader.GetDecimal(2);
-
-                InvoiceLine tmpInvoiceLine = new(productname, quantity, totalamount);
-
-                result.Add(tmpInvoiceLine);
-            }
-
-            await connection.CloseAsync();
-
-            _logger.LogInformation("Executed GetAllInvoiceLinessAsync, returned {0} results", result.Count);
-
-            return result;
-        }
-        public async Task<StatusCodeResult> InsertInvoiceLineAsync(int productid, int quantity)
-        {
-            string cmdText = "INSERT INTO InvoiceLines (product_id, quantity) VALUES (@productid, @quantity)";
+            string cmdText = "INSERT INTO InvoiceLines (invoice_number, product_id, quantity, amount) VALUES (@invoice_number, @productid, @quantity, @amount)";
             SqlConnection connection = new(_connectionString);
-
 
             using SqlCommand cmd = new(cmdText, connection);
             cmd.Parameters.AddWithValue("@productid", productid);
             cmd.Parameters.AddWithValue("@quantity", quantity);
-
+            cmd.Parameters.AddWithValue("@invoice_number", invoice_number);
+            cmd.Parameters.AddWithValue("@amount", amount);
 
             try
             {
@@ -264,7 +271,8 @@ namespace Green.Api.Data
             }
             catch (Exception e)
             {
-
+                
+                // if error is that a violation of primary key error -> increment quantity -> return stat 200
                 _logger.LogError("Error in InsertInvoiceLine while trying to open a connection or execute non query");
                 _logger.LogInformation(e.Message);
                 return new StatusCodeResult(500);
