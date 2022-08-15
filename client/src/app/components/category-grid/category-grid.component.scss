@@ -1,0 +1,62 @@
+.category-container {
+    display: grid;
+    grid-template-areas: 
+        "one two three three"
+        "four four five six";
+    
+}
+
+.nft-container {
+    grid-area: one;
+    background-color: rgb(233, 231, 231);
+    font-family: 'Poppins';
+}
+
+.photo-container {
+    grid-area: two;
+    background-color: rgb(233, 231, 231);
+    font-family: 'Poppins';
+}
+
+.document-container {
+    grid-area: three;
+    background: rgb(0,0,3);
+    background: linear-gradient(90deg, rgba(0,0,3,1) 0%, rgba(171,166,166,1) 50%, rgba(0,0,0,1) 100%);
+    font-family: 'Poppins';
+    color: whitesmoke;
+}
+
+.music-container {
+    grid-area: four;
+    background: rgb(210,210,214);
+    background: linear-gradient(0deg, rgba(210,210,214,1) 0%, rgba(242,237,237,1) 50%, rgba(147,138,138,1) 100%);
+    font-family: 'Poppins';
+}
+
+.audiobook-container {
+    grid-area: five;
+    background-color: rgb(233, 231, 231);
+    font-family: 'Poppins';
+}
+
+.all-container {
+    grid-area: six;
+    background-color: rgb(233, 231, 231);
+
+}
+
+.cat-item {
+    margin: 10px;
+    padding: 5px;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 .125rem .25rem rgba(black, .075);
+    min-height: 12rem;
+}
+
+.gg-music-note {
+    // max-width: 100%;
+    // height: auto;
+    
+}
