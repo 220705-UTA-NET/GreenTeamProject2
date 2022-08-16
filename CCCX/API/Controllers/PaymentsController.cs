@@ -22,22 +22,22 @@ namespace API.Controllers
         {
             _logger = logger;
             _paymentService = paymentService;
-            _whSecret = config.GetSection("StripeSettings:WhSecret").Value;
+            _whSecret = config.GetSection("StripeSettings:WhSecret").Value; //retrieves wh secret from config
         }
 
         [Authorize]
         [HttpPost("{basketId}")]
-        public async Task<ActionResult<CustomerBasket>> CreateOrUpdatePaymentIntent(string basketId)
+        public async Task<ActionResult<CustomerBasket>> CreateOrUpdatePaymentIntent(string basketId) //creates or updates payment intent
         {
-            var basket = await _paymentService.CreateOrUpdatePaymentIntent(basketId);
+            var basket = await _paymentService.CreateOrUpdatePaymentIntent(basketId); //awaits response from database
 
-            if (basket == null) return BadRequest(new ApiResponse(400, "Problem with your basket"));
+            if (basket == null) return BadRequest(new ApiResponse(400, "Problem with your basket")); //if basket is null return bad request
 
-            return basket;
+            return basket; //returns basket if successful
         }
-
+            // a webhook is a request that is sent to a webhook endpoint.
         [HttpPost("webhook")]
-        public async Task<ActionResult> StripeWebhook()
+        public async Task<ActionResult> StripeWebhook() // webhook???
         {
             var json = await new StreamReader(HttpContext.Request.Body).ReadToEndAsync();
 

@@ -5,9 +5,9 @@ namespace API.Controllers
 {
     public class FallbackController : ControllerBase
     {
-        public IActionResult Index()
+        public IActionResult Index() // index returns a file
         {
-            return PhysicalFile(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "index.html"), "text/HTML");
+            return PhysicalFile(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "index.html"), "text/HTML"); //returns a file
         }
     }
 }

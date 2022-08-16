@@ -33,51 +33,51 @@ namespace API.Controllers
             _productBrandRepo = productBrandRepo;
         }
 
-        [Cached(600)]
+        [Cached(600)] //cache for 10 minutes
         [HttpGet]
-        public async Task<ActionResult<Pagination<ProductToReturnDto>>> GetProducts(
-            [FromQuery] ProductSpecParams productParams)
+        public async Task<ActionResult<Pagination<ProductToReturnDto>>> GetProducts( 
+            [FromQuery] ProductSpecParams productParams) // gets products
         {
-            var spec = new ProductsWithTypesAndBrandsSpecification(productParams);
-            var countSpec = new ProductsWithFiltersForCountSpecification(productParams);
+            var spec = new ProductsWithTypesAndBrandsSpecification(productParams); //creates specification for products
+            var countSpec = new ProductsWithFiltersForCountSpecification(productParams); //creates specification for products with filters???
 
-            var totalItems = await _productsRepo.CountAsync(countSpec);
+            var totalItems = await _productsRepo.CountAsync(countSpec); //gets total items
 
-            var products = await _productsRepo.ListAsync(spec);
+            var products = await _productsRepo.ListAsync(spec); //gets products
 
-            var data = _mapper.Map<IReadOnlyList<ProductToReturnDto>>(products);
+            var data = _mapper.Map<IReadOnlyList<ProductToReturnDto>>(products); //maps products to return dto
 
             return Ok(new Pagination<ProductToReturnDto>(productParams.PageIndex,
-                productParams.PageSize, totalItems, data));
+                productParams.PageSize, totalItems, data)); //returns products if successful
         }
 
         [Cached(600)]
         [HttpGet("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK)] //returns ok if successful
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)] //returns not found if unsuccessful
         public async Task<ActionResult<ProductToReturnDto>> GetProduct(int id)
         {
-            var spec = new ProductsWithTypesAndBrandsSpecification(id);
+            var spec = new ProductsWithTypesAndBrandsSpecification(id); //creates specification for product with id
 
-            var product = await _productsRepo.GetEntityWithSpec(spec);
+            var product = await _productsRepo.GetEntityWithSpec(spec); //gets product with specification
 
-            if (product == null) return NotFound(new ApiResponse(404));
+            if (product == null) return NotFound(new ApiResponse(404)); //if product is null return not found
 
-            return _mapper.Map<ProductToReturnDto>(product);
+            return _mapper.Map<ProductToReturnDto>(product); //returns product if successful
         }
 
         [Cached(600)]
         [HttpGet("brands")]
-        public async Task<ActionResult<IReadOnlyList<ProductBrand>>> GetBrands()
+        public async Task<ActionResult<IReadOnlyList<ProductBrand>>> GetBrands() 
         {
-            return Ok(await _productBrandRepo.ListAllAsync());
+            return Ok(await _productBrandRepo.ListAllAsync()); //returns brands if successful
         }
 
         [Cached(600)]
         [HttpGet("types")]
         public async Task<ActionResult<IReadOnlyList<ProductBrand>>> GetTypes()
         {
-            return Ok(await _productTypeRepo.ListAllAsync());
+            return Ok(await _productTypeRepo.ListAllAsync()); //returns types if successful
         }
     }
 }

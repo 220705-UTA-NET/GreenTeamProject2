@@ -23,45 +23,46 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Order>> CreateOrder(OrderDto orderDto)
+        public async Task<ActionResult<Order>> CreateOrder(OrderDto orderDto) //creates order
+       
         {
-            var email = HttpContext.User.RetrieveEmailFromPrincipal();
+            var email = HttpContext.User.RetrieveEmailFromPrincipal(); //retrieves email from principal
 
-            var address = _mapper.Map<AddressDto, Address>(orderDto.ShipToAddress);
+            var address = _mapper.Map<AddressDto, Address>(orderDto.ShipToAddress); //maps ship to address to address
 
-            var order = await _orderService.CreateOrderAsync(email, orderDto.DeliveryMethodId, orderDto.BasketId, address);
+            var order = await _orderService.CreateOrderAsync(email, orderDto.DeliveryMethodId, orderDto.BasketId, address); //creates order
 
-            if (order == null) return BadRequest(new ApiResponse(400, "Problem creating order"));
+            if (order == null) return BadRequest(new ApiResponse(400, "Problem creating order")); //if order is null return bad request
 
-            return Ok(order);
+            return Ok(order); //returns order if successful
         }
 
         [HttpGet]
-        public async Task<ActionResult<IReadOnlyList<OrderDto>>> GetOrdersForUser()
+        public async Task<ActionResult<IReadOnlyList<OrderDto>>> GetOrdersForUser() //gets orders for user
         {
-            var email = User.RetrieveEmailFromPrincipal();
+            var email = User.RetrieveEmailFromPrincipal(); //retrieves email from principal
 
-            var orders = await _orderService.GetOrdersForUserAsync(email);
+            var orders = await _orderService.GetOrdersForUserAsync(email); //gets orders for user using email to track
 
-            return Ok(_mapper.Map<IReadOnlyList<OrderToReturnDto>>(orders));
+            return Ok(_mapper.Map<IReadOnlyList<OrderToReturnDto>>(orders)); //returns orders if successful
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<OrderToReturnDto>> GetOrderByIdForUser(int id)
+        public async Task<ActionResult<OrderToReturnDto>> GetOrderByIdForUser(int id) //gets order by id for user
         {
-            var email = User.RetrieveEmailFromPrincipal();
+            var email = User.RetrieveEmailFromPrincipal(); //retrieves email from principal
 
-            var order = await _orderService.GetOrderByIdAsync(id, email);
+            var order = await _orderService.GetOrderByIdAsync(id, email); //gets order by id for user using email to track
 
-            if (order == null) return NotFound(new ApiResponse(404));
+            if (order == null) return NotFound(new ApiResponse(404)); //if order is null return not found
 
-            return _mapper.Map<OrderToReturnDto>(order);
+            return _mapper.Map<OrderToReturnDto>(order); //returns order if successful
         }
 
         [HttpGet("deliveryMethods")]
-        public async Task<ActionResult<IReadOnlyList<DeliveryMethod>>> GetDeliveryMethods()
+        public async Task<ActionResult<IReadOnlyList<DeliveryMethod>>> GetDeliveryMethods() //delivery method
         {
-            return Ok(await _orderService.GetDeliveryMethodsAsync());
+            return Ok(await _orderService.GetDeliveryMethodsAsync()); //returns delivery methods if successful
         }
     }
 }
