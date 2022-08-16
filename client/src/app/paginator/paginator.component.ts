@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {MatPaginatorModule} from '@angular/material/paginator';
 
 @Component({
   selector: 'app-paginator',
@@ -11,6 +12,6 @@ export class PaginatorComponent implements OnInit {
 
   ngOnInit(): void {
   }
-  count = 1;
+  
 
 }
