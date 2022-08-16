@@ -1,6 +1,11 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Green.API.Models;
 using Green.Api.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace Green.API.Controllers
 {
@@ -9,8 +14,13 @@ namespace Green.API.Controllers
     public class SalesManagementController : ControllerBase
     {
 
+<<<<<<< HEAD
         private readonly IRepository _repo;
         private readonly ILogger<SalesManagementController> _logger;
+=======
+       private readonly IRepository _repo;
+       private readonly ILogger<SalesManagementController> _logger;
+>>>>>>> origin/daniel
 
         // Constructor
         public SalesManagementController(IRepository repo, ILogger<SalesManagementController> logger)
@@ -19,6 +29,34 @@ namespace Green.API.Controllers
             _logger = logger;
         }
 
+<<<<<<< HEAD
+=======
+        [HttpGet("{username}/{password}")]
+        public async Task<ActionResult> GetExistingCustomer(string username, string password)
+        {
+
+            try
+            {
+                
+                StatusCodeResult st = await _repo.GetExistingCustomerAsync(username, password);
+                _logger.LogInformation(st.StatusCode.ToString());
+                
+                if (st.StatusCode != 200) return StatusCode(500, "User not found");
+
+            }
+            catch (Exception e)
+            {
+
+                _logger.LogError(e, e.Message);
+                return StatusCode(500);
+            }
+
+            _logger.LogInformation("Executed GetExistingCustomer");
+            return StatusCode(200, "User found");
+        }
+
+
+>>>>>>> origin/daniel
         // Two ways to access the endpoint
         // [HttpGet("/getallcustomers")] -> http://localhost:9999/getallcustomers
         // [HttpGet("getallcustomers")]  -> http://localhost:9999/SalesManagement/getallcustomers
@@ -95,7 +133,11 @@ namespace Green.API.Controllers
 
             return invoicelines.ToList();
         }
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> origin/daniel
 
 
         [HttpPost("{username}/{password}/{email}")]
@@ -103,7 +145,11 @@ namespace Green.API.Controllers
         {
             try
             {
+<<<<<<< HEAD
                 StatusCodeResult rep = await _repo.InsertCustomerAsync(username, password, email);
+=======
+                StatusCodeResult rep = await _repo.InsertCustomerAsync(username,password, email); 
+>>>>>>> origin/daniel
                 if (rep.StatusCode == 500) return StatusCode(500, "Customer could not be inserted!");
             }
             catch (Exception e)
@@ -114,6 +160,7 @@ namespace Green.API.Controllers
             }
             return StatusCode(200);
         }
+<<<<<<< HEAD
 
         [HttpPost("{invoicedate}/{customerid}/{paymenttype}/{totalamount}")]
         public async Task<ActionResult> PostSalesInvoice(DateTime invoicedate, int customerid, string paymenttype, decimal totalamount)
@@ -121,6 +168,15 @@ namespace Green.API.Controllers
             try
             {
                 StatusCodeResult rep = await _repo.InsertSalesInvoiceAsync(invoicedate, customerid, paymenttype, totalamount);
+=======
+       
+        [HttpPost("{invoicedate}/{customerid}/{paymenttype}/{totalamount}")]
+        public async Task<ActionResult> PostSalesInvoice(DateTime invoicedate, int customerid, string paymenttype, decimal totalamount)
+        {
+             try
+            {
+                StatusCodeResult rep = await _repo.InsertSalesInvoiceAsync(invoicedate, customerid, paymenttype, totalamount); 
+>>>>>>> origin/daniel
                 if (rep.StatusCode == 500) return StatusCode(500, "SalesInvoice could not be inserted!");
             }
             catch (Exception e)
@@ -137,7 +193,11 @@ namespace Green.API.Controllers
         {
             try
             {
+<<<<<<< HEAD
                 StatusCodeResult rep = await _repo.InsertInvoiceLineAsync(productid, quantity);
+=======
+                StatusCodeResult rep = await _repo.InsertInvoiceLineAsync(productid,quantity); 
+>>>>>>> origin/daniel
                 if (rep.StatusCode == 500) return StatusCode(500, "InvoiceLine could not be inserted!");
             }
             catch (Exception e)

@@ -1,7 +1,17 @@
+<<<<<<< HEAD
+=======
+
+using System;
+using System.Collections.Generic;
+>>>>>>> origin/daniel
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Green.API.Models;
 using System.Data.SqlClient;
+<<<<<<< HEAD
+=======
+using System.Threading.Tasks;
+>>>>>>> origin/daniel
 
 namespace Green.Api.Data
 {
@@ -16,6 +26,38 @@ namespace Green.Api.Data
             _logger = logger;
         }
 
+        public async Task<StatusCodeResult> GetExistingCustomerAsync(string username, string password)
+        {
+            _logger.LogInformation(username + " " + password);
+            using SqlConnection connection = new(_connectionString);
+
+            await connection.OpenAsync();
+
+            string cmdText = "SELECT * FROM Customers WHERE username=@Username AND password=@Password;";
+            
+            using SqlCommand cmd = new(cmdText, connection);
+            cmd.Parameters.AddWithValue("@Username", username);
+            cmd.Parameters.AddWithValue("@Password", password);
+
+            using SqlDataReader reader = await cmd.ExecuteReaderAsync();
+
+            try
+            {
+                if(!await reader.ReadAsync()) return new StatusCodeResult(500);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError("Error in GetExistingCustomerAsync while trying to open a connection or execute non query");
+                _logger.LogError(e.Message);
+                await connection.CloseAsync();
+                return new StatusCodeResult(500);
+            }
+
+            await connection.CloseAsync();
+            _logger.LogInformation("Executed GetExistingCustomerAsync");
+            return new StatusCodeResult(200);
+        }
+
         public async Task<IEnumerable<Customer>> GetAllCustomersAsync()
         {
             List<Customer> result = new();
@@ -23,7 +65,11 @@ namespace Green.Api.Data
             using SqlConnection connection = new(_connectionString);
             await connection.OpenAsync();
 
+<<<<<<< HEAD
             string cmdText = "SELECT * FROM Customers;";
+=======
+            string cmdText = "SELECT username, name, address, phone, email, password FROM Customers;";
+>>>>>>> origin/daniel
 
             using SqlCommand cmd = new(cmdText, connection);
 
@@ -31,6 +77,7 @@ namespace Green.Api.Data
 
             while (await reader.ReadAsync())
             {
+<<<<<<< HEAD
 
                 try
                 {
@@ -51,6 +98,19 @@ namespace Green.Api.Data
                 {
                     _logger.LogError("ERROR is: {0}", ex.Message);
                 }
+=======
+                
+                string username = reader.GetString(0);
+                string name = reader.GetString(1);
+                string? address = reader.IsDBNull(2) ? "" : reader.GetString(2);
+                string? phonenumber = reader.IsDBNull(3) ? "" : reader.GetString(3);
+                string email = reader.GetString(4);
+                string? password = reader.IsDBNull(5) ? "" : reader.GetString(5);
+
+                Customer tmpCustomer = new(username, password, email, name, address, phonenumber);
+                result.Add(tmpCustomer);
+
+>>>>>>> origin/daniel
             }
 
             await connection.CloseAsync();
@@ -107,14 +167,24 @@ namespace Green.Api.Data
 
             while (await reader.ReadAsync())
             {
+<<<<<<< HEAD
                 string category = reader.GetString(0);
                 string productname = reader.GetString(1);
                 string description = reader.GetString(2);
+=======
+                string category =  reader.GetString(0);
+                string productname = reader.GetString(1);
+                string description =  reader.GetString(2);
+>>>>>>> origin/daniel
                 string artistname = reader.GetString(3);
                 decimal unitprice = reader.GetDecimal(4);
 
 
+<<<<<<< HEAD
                 Product tmpProduct = new(category, productname, description, artistname, unitprice);
+=======
+                Product tmpProduct = new(category,productname, description, artistname, unitprice);
+>>>>>>> origin/daniel
                 result.Add(tmpProduct);
             }
 
@@ -141,6 +211,7 @@ namespace Green.Api.Data
 
             while (await reader.ReadAsync())
             {
+<<<<<<< HEAD
                 string name = reader.GetString(0);
                 string email = reader.GetString(1);
                 string? address = reader.IsDBNull(2) ? "" : reader.GetString(2);
@@ -150,6 +221,17 @@ namespace Green.Api.Data
 
 
                 SalesInvoice tmpSalesInvoice = new(name, email, address, invoicedate, paymenttype, totalamount);
+=======
+                string name =  reader.GetString(0);
+                string email =  reader.GetString(1);
+                string? address = reader.IsDBNull(2) ? "" : reader.GetString(2);
+                DateTime invoicedate = reader.GetDateTime(3);
+                string paymenttype =  reader.GetString(4);
+                decimal totalamount = reader.GetDecimal(5);
+
+
+                SalesInvoice tmpSalesInvoice = new(name,email,address,invoicedate,paymenttype,totalamount);
+>>>>>>> origin/daniel
                 result.Add(tmpSalesInvoice);
             }
 
@@ -179,7 +261,10 @@ namespace Green.Api.Data
             }
             catch (Exception e)
             {
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/daniel
                 _logger.LogError("Error in InsertSalesInvoice while trying to open a connection or execute non query");
                 _logger.LogInformation(e.Message);
                 return new StatusCodeResult(500);
@@ -205,7 +290,11 @@ namespace Green.Api.Data
 
             while (await reader.ReadAsync())
             {
+<<<<<<< HEAD
                 string productname = reader.GetString(0);
+=======
+                string productname =  reader.GetString(0);
+>>>>>>> origin/daniel
                 int quantity = reader.GetInt32(1);
                 decimal totalamount = reader.GetDecimal(2);
 
