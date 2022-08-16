@@ -1,13 +1,18 @@
-p {
+.pagination_section {
     position: absolute;
     min-height: 25px;
     min-width: 25px;
-    border-radius: 50%;
+    // border-radius: 50%;
+    // margin: 30px;
     font-size:1em;
-    background-color: blue;
+    // background-color: blue;
     color: white;
     text-align: center;
-    top: -12px;
-    right: 32px;
+    top: 600px;
+    right: 350px;
 
+}
+a{  
+    text-align: center;
+    margin: 30px;
 }

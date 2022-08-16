@@ -11,5 +11,6 @@ export class PaginatorComponent implements OnInit {
 
   ngOnInit(): void {
   }
+  count = 1;
 
 }
