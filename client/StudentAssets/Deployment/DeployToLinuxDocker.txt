@@ -140,6 +140,7 @@ systemctl reload apache2
 
 14.  Optional - Change the logging level for the appsettings.json to information for the Microsoft logging level:
 
+<<<<<<< HEAD
 {
   "Logging": {
     "LogLevel": {
@@ -148,6 +149,16 @@ systemctl reload apache2
       "Microsoft.Hosting.Lifetime": "Information"
     }
   },
+=======
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft": "Information",
+      "Microsoft.Hosting.Lifetime": "Information"
+    }
+  },
+>>>>>>> origin/Onandi
 }
 
 15.  Republish the app with changes by running the following command in VS Code terminal:
@@ -207,6 +218,5 @@ netstat -ntpl
 journalctl -u skinet-web.service --since "5 min ago"
 
 25.  Make sure there are no errors and then test you can browse to the published app on http://ipaddress
-
 
 

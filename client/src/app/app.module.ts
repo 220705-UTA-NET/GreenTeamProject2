@@ -13,7 +13,7 @@ import { PaginatorComponent } from './paginator/paginator.component';
     AppComponent,
     NavBarComponent,
     PaginatorComponent
-    
+
   ],
   imports: [
     BrowserModule,

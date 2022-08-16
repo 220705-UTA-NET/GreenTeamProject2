@@ -91,6 +91,7 @@ Add a connection string in appsettings.development.json:
 
 Add the DbContext to the Startup class (startup class should look as follows):
 
+
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -140,6 +141,7 @@ namespace API
         }
     }
 }
+
 
 
 Adding migration and updating database:
