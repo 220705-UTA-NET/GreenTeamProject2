@@ -36,7 +36,7 @@ namespace API.Controllers
             return basket; //returns basket if successful
         }
             // a webhook is a request that is sent to a webhook endpoint.
-        [HttpPost("webhook")]
+        [HttpPost("webhook")] //webhook hooks into website.
         public async Task<ActionResult> StripeWebhook() // webhook???
         {
             var json = await new StreamReader(HttpContext.Request.Body).ReadToEndAsync();
