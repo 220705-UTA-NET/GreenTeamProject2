@@ -744,11 +744,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/brandon/Revature/GreenTeamProject2/Green.API/Green.API/Green.API.csproj",
+      "projectUniqueName": "/Users/brandon/GreenTeamProject2/Green.API/Green.API/Green.API.csproj",
       "projectName": "Green.API",
-      "projectPath": "/Users/brandon/Revature/GreenTeamProject2/Green.API/Green.API/Green.API.csproj",
+      "projectPath": "/Users/brandon/GreenTeamProject2/Green.API/Green.API/Green.API.csproj",
       "packagesPath": "/Users/brandon/.nuget/packages/",
-      "outputPath": "/Users/brandon/Revature/GreenTeamProject2/Green.API/Green.API/obj/",
+      "outputPath": "/Users/brandon/GreenTeamProject2/Green.API/Green.API/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/brandon/.nuget/NuGet/NuGet.Config"

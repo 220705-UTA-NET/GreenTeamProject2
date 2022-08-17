@@ -287,9 +287,9 @@ namespace Green.Api.Data
         {
             List<Product> result = new();
 
-
             string cmdText = "SELECT * FROM Products WHERE category_id=@category;";
             SqlConnection connection = new(_connectionString);
+            await connection.OpenAsync();
 
             using SqlCommand cmd = new(cmdText, connection);
             cmd.Parameters.AddWithValue("@category", category);
