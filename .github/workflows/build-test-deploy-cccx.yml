@@ -26,13 +26,9 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - run: npm ci
-      working-directory: ./CCCX/client/
-    - run: npm run build --if-present
-      working-directory: ./CCCX/client/
-    - run: npm test
-      working-directory: ./CCCX/client/
-      
+    - run: npm --prefix ./CCCX/client/ ci 
+    - run: npm --prefix ./CCCX/client/ run build --if-present
+    - run: npm --prefix ./CCCX/client/ test
       
   docker-publish:
       needs: build
