@@ -46,9 +46,9 @@ jobs:
         
     - name: npm install, build, and test
       run: |
-        npm --prefix /client install
-        npm --prefix /client run build --if-present
-        npm --prefix /client run test --if-present
+        npm --prefix ./client/ install
+        npm --prefix ./client/ run build --if-present
+        npm --prefix ./client/ run test --if-present
 
     - name: Upload artifact for deployment job
       uses: actions/upload-artifact@v3
