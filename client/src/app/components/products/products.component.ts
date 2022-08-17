@@ -24,12 +24,13 @@ export class ProductsComponent implements OnInit {
   
     // set the category of the current route
     this.category = this.route.snapshot.params['category'];
-
+    console.log(this.category);
+    this.getProducts();
     // subscribe to callback so that if params is updated then the component view is updated
     // this.route.params.subscribe( (params: Params) => { this.category = params['category'] });
   }
   
   getProducts() {
-    this.http.get().subscribe(products => { console.log(products)});
+    this.http.get(`https://green-api.azurewebsites.net/salesmanagement/products/${this.category}`).subscribe(products => { console.log(products)});
   }
 }
