@@ -1,5 +1,6 @@
 # step 1
-FROM node:latest as node
+FROM node:16.16.0 as node
+EXPOSE 80
 WORKDIR /app
 COPY ./ ./
 RUN npm install
