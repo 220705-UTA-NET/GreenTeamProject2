@@ -1,0 +1,10 @@
+.product-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px 10px;
+}
+
+.product-item {
+    border: 2px solid red;
+    border-radius: 2%;
+}

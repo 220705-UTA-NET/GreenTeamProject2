@@ -16,6 +16,6 @@ namespace Green.Api.Data
         Task<StatusCodeResult> InsertSalesInvoiceAsync(DateTime invoicedate, int customerid, string paymenttype, decimal totalamount);
         Task<StatusCodeResult> InsertCustomerAsync(string username, string password, string email);
         Task<StatusCodeResult> InsertInvoiceLineAsync(int invoice_number, int productid, int quantity, decimal amount);
-
+        Task<IEnumerable<Product>> GetProductsOfCategoryAsync(string category);
     }
 }

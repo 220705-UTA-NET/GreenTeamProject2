@@ -1,4 +1,3 @@
-
 using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
@@ -6,6 +5,8 @@ using Microsoft.Extensions.Logging;
 using Green.API.Models;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
+using System.Net;
+using System.Xml.Linq;
 
 namespace Green.Api.Data
 {
@@ -28,7 +29,7 @@ namespace Green.Api.Data
             await connection.OpenAsync();
 
             string cmdText = "SELECT * FROM Customers WHERE username=@Username AND password=@Password;";
-            
+
             using SqlCommand cmd = new(cmdText, connection);
             cmd.Parameters.AddWithValue("@Username", username);
             cmd.Parameters.AddWithValue("@Password", password);
@@ -37,7 +38,7 @@ namespace Green.Api.Data
 
             try
             {
-                if(!await reader.ReadAsync()) return new StatusCodeResult(500);
+                if (!await reader.ReadAsync()) return new StatusCodeResult(500);
             }
             catch (Exception e)
             {
@@ -67,7 +68,7 @@ namespace Green.Api.Data
 
             while (await reader.ReadAsync())
             {
-                
+
                 string username = reader.GetString(0);
                 string name = reader.GetString(1);
                 string? address = reader.IsDBNull(2) ? "" : reader.GetString(2);
@@ -127,7 +128,6 @@ namespace Green.Api.Data
 
             string cmdText = "SELECT product_name, description, category_id, unit_price, artist_id FROM Products;";
 
-
             using SqlCommand cmd = new(cmdText, connection);
 
             using SqlDataReader reader = await cmd.ExecuteReaderAsync();
@@ -135,8 +135,8 @@ namespace Green.Api.Data
             while (await reader.ReadAsync())
             {
                 string productname = reader.GetString(0);
-                string description =  reader.GetString(1);
-                string category =  reader.GetString(2);
+                string description = reader.GetString(1);
+                string category = reader.GetString(2);
                 decimal unitprice = reader.GetDecimal(3);
                 string artistname = reader.GetString(4);
 
@@ -167,11 +167,11 @@ namespace Green.Api.Data
 
             while (await reader.ReadAsync())
             {
-                string name =  reader.GetString(0);
-                string email =  reader.GetString(1);
+                string name = reader.GetString(0);
+                string email = reader.GetString(1);
                 string? address = reader.IsDBNull(2) ? "" : reader.GetString(2);
                 DateTime invoicedate = reader.GetDateTime(3);
-                string paymenttype =  reader.GetString(4);
+                string paymenttype = reader.GetString(4);
                 decimal totalamount = reader.GetDecimal(5);
 
 
@@ -217,7 +217,7 @@ namespace Green.Api.Data
         }
 
 
-       
+
 
 
 
@@ -271,7 +271,7 @@ namespace Green.Api.Data
             }
             catch (Exception e)
             {
-                
+
                 // if error is that a violation of primary key error -> increment quantity -> return stat 200
                 _logger.LogError("Error in InsertInvoiceLine while trying to open a connection or execute non query");
                 _logger.LogInformation(e.Message);
@@ -281,6 +281,114 @@ namespace Green.Api.Data
             await connection.CloseAsync();
             _logger.LogInformation("Executed InsertInvoiceLineAsync");
             return new StatusCodeResult(200);
+        }
+
+        public async Task<IEnumerable<Product>> GetProductsOfCategoryAsync(string category)
+        {
+            List<Product> result = new();
+
+
+            string cmdText = "SELECT * FROM Products WHERE category_id=@category;";
+            SqlConnection connection = new(_connectionString);
+
+            using SqlCommand cmd = new(cmdText, connection);
+            cmd.Parameters.AddWithValue("@category", category);
+            using SqlDataReader reader = await cmd.ExecuteReaderAsync();
+
+            while (await reader.ReadAsync())
+            {
+                int productId = reader.GetInt32(0);
+                string categoryId = reader.GetString(1);
+                string productname = reader.GetString(2);
+                string description = reader.GetString(3);
+                string artistname = reader.GetString(4);
+                decimal unitprice = reader.GetDecimal(5);
+
+                Product tmpProduct = new(productId, category, productname, description, artistname, unitprice);
+                result.Add(tmpProduct);
+            }
+
+        //    using SqlCommand cmd = new(cmdText, connection);
+
+            _logger.LogInformation("Executed GetProductsOfCategoryAsync, returned {0} results", result.Count);
+
+            return result;
+        }
+
+        public async Task<ActionResult<Customer>> LoginUserAsync(Customer customer)
+        {
+            string cmdText = "SELECT * from Customer WHERE @username=username AND @password=password;";
+            SqlConnection connection = new(_connectionString);
+
+            using SqlCommand cmd = new(cmdText, connection);
+            cmd.Parameters.AddWithValue("@username", customer.Username);
+            cmd.Parameters.AddWithValue("@password", customer.Password);
+
+            using SqlDataReader reader = await cmd.ExecuteReaderAsync();
+
+            Customer? c;
+            try
+            {
+                await connection.OpenAsync();
+                if(await reader.ReadAsync())
+                {
+                    c = new(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetString(6), reader.GetString(3), reader.GetString(4), reader.GetString(5));
+                } else
+                {
+                    return new StatusCodeResult(500);
+                }
+            }
+            catch (Exception e)
+            {
+
+                // if error is that a violation of primary key error -> increment quantity -> return stat 200
+                _logger.LogError("Error in InsertInvoiceLine while trying to open a connection or execute non query");
+                _logger.LogInformation(e.Message);
+                return new StatusCodeResult(500);
+            }
+
+            await connection.CloseAsync();
+            _logger.LogInformation("Executed InsertInvoiceLineAsync");
+            return c;
+        }
+
+
+        public async Task<ActionResult<Customer>> SignupUserAsync(Customer customer)
+        {
+            string cmdText = "SELECT * from Customer WHERE @username=username AND @password=password;";
+            SqlConnection connection = new(_connectionString);
+
+            using SqlCommand cmd = new(cmdText, connection);
+            cmd.Parameters.AddWithValue("@username", customer.Username);
+            cmd.Parameters.AddWithValue("@password", customer.Password);
+
+            using SqlDataReader reader = await cmd.ExecuteReaderAsync();
+
+            Customer? c;
+            try
+            {
+                await connection.OpenAsync();
+                if (await reader.ReadAsync())
+                {
+                    c = new(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetString(6), reader.GetString(3), reader.GetString(4), reader.GetString(5));
+                }
+                else
+                {
+                    return new StatusCodeResult(500);
+                }
+            }
+            catch (Exception e)
+            {
+
+                // if error is that a violation of primary key error -> increment quantity -> return stat 200
+                _logger.LogError("Error in InsertInvoiceLine while trying to open a connection or execute non query");
+                _logger.LogInformation(e.Message);
+                return new StatusCodeResult(500);
+            }
+
+            await connection.CloseAsync();
+            _logger.LogInformation("Executed InsertInvoiceLineAsync");
+            return c;
         }
     }
 }

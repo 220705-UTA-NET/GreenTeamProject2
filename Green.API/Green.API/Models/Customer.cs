@@ -1,7 +1,8 @@
-﻿namespace Green.API.Models
+namespace Green.API.Models
 {
     public class Customer
     {
+        public int Id { get; set; }
         public string Username { get; set; } // might be deleted later
         public string? Password { get; set; }
         public string Email { get; set; }
@@ -22,6 +23,21 @@
             Name = name;
                        
         }
-        
+
+        public Customer(int id, string username, string password, string email, string name, string address, string phonenumber)
+        {
+            Id = id;
+            Username = username;
+            Password = password;
+            Email = email;
+            Address = address;
+            PhoneNumber = phonenumber;
+            Name = name;
+
+        }
+
+
+
     }
 }
+
