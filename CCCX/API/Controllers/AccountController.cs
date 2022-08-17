@@ -51,7 +51,8 @@ namespace API.Controllers
         [HttpGet("address")]
         public async Task<ActionResult<AddressDto>> GetUserAddress()
         {
-            var user = await _userManager.FindByEmailWithAddressAsync(User);
+            var user = await _userManager.FindUserByCLaimsPrincibleWithAddressAsync
+                (HttpContext.User);
 
             return _mapper.Map<AddressDto>(user.Address);
         }
@@ -60,7 +61,7 @@ namespace API.Controllers
         [HttpPut("address")]
         public async Task<ActionResult<AddressDto>> UpdateUserAddress(AddressDto address)
         {
-            var user = await _userManager.FindByEmailWithAddressAsync(User);
+            var user = await _userManager.FindUserByCLaimsPrincibleWithAddressAsync(User);
 
             user.Address = _mapper.Map<Address>(address);
 
