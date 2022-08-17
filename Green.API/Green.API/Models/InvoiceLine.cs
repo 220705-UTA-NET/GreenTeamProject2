@@ -2,16 +2,18 @@
 {
     public class InvoiceLine
     {
-        
-        public string Productname { get; set; }
-        public int Quantity { get; set; }
-        public decimal Totalamount { get; set;}
 
-        public InvoiceLine(string productname,int quantity, decimal totalamount)
+        public int InvoiceNumber { get; set; }
+        public int ProductId { get; set; }
+        public int Quantity { get; set; }
+        public decimal Amount { get; set; }
+
+        public InvoiceLine(int invoicenumber, int productid, int quantity, decimal amount)
         {
-            Productname = productname;
+            InvoiceNumber = invoicenumber;
+            ProductId = productid;
             Quantity = quantity;
-            Totalamount = totalamount;
+            Amount = amount;
         }
     }
 }
