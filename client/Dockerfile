@@ -2,7 +2,7 @@
 FROM node:latest as node
 WORKDIR /app
 COPY . .
-RUN npm install
+RUN npm install --force
 RUN npm run build --prod
 # step 2
 FROM nginx:alpine
