@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { MockProducts } from 'src/app/MockProducts';
 import { Product } from 'src/app/Product';
-
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-products',
@@ -17,7 +17,7 @@ export class ProductsComponent implements OnInit {
   products: Product[];
 
   category: string = "";
-
+  responsedata = "";
   constructor(private route: ActivatedRoute, private http: HttpClient) { }
 
   ngOnInit(): void {
@@ -25,14 +25,35 @@ export class ProductsComponent implements OnInit {
     // set the category of the current route
     this.category = this.route.snapshot.params['category'];
     console.log(this.category);
-    this.getProducts();
+    
+    if(this.category == "ALL") {
+      this.getAllProducts();
+    } else {
+      this.getProducts();
+    }
     // subscribe to callback so that if params is updated then the component view is updated
     // this.route.params.subscribe( (params: Params) => { this.category = params['category'] });
   }
+
+  getAllProducts() {
+    this.http.get(`https://green-api.azurewebsites.net/salesmanagement/getallproducts`).pipe(map(responseData => {
+      let arr = [];
+      for(const o in responseData) {
+        arr.push({...responseData[o]});
+      }
+      return arr;
+    })).subscribe(products => { console.log(typeof(products)); console.log(products); this.products = products;});
+  }
   
   getProducts() {
-    this.http.get(`https://green-api.azurewebsites.net/salesmanagement/products/${this.category}`, { headers: new HttpHeaders({
-      'Origin': 'https://localhost:4200/'
-    })}).subscribe(products => { console.log(products)});
+    
+    this.http.get(`https://green-api.azurewebsites.net/salesmanagement/products/${this.category}`).pipe(map(responseData => {
+      let arr = [];
+      for(const o in responseData) {
+        arr.push({...responseData[o]});
+      }
+      return arr;
+    })).subscribe(products => { console.log(typeof(products)); console.log(products); this.products = products;});
   }
 }
+
