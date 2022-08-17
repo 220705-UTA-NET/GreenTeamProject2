@@ -37,7 +37,7 @@ export const MockProducts: Product[] = [
         unitPrice: 1.00
     },
     {   id: 6,
-        categoryId: "MUS",
+        categoryId: "DOC",
         productName: "Mars",
         description: "Planet",
         artistid: "Artist 4",
