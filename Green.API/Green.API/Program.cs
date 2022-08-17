@@ -2,6 +2,8 @@ using Green.Api.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors();
+
 // Add services to the container.
 string connectionString = builder.Configuration.GetConnectionString("dbURL");
 
@@ -15,6 +17,13 @@ var app = builder.Build();
 
 app.UseSwagger();
 app.UseSwaggerUI();
+
+app.UseCors(builder =>
+{
+    builder.AllowAnyHeader();
+    builder.AllowAnyOrigin();
+    builder.AllowAnyMethod();
+});
 
 app.UseHttpsRedirection();
 

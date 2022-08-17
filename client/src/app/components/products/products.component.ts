@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { MockProducts } from 'src/app/MockProducts';
@@ -31,6 +31,8 @@ export class ProductsComponent implements OnInit {
   }
   
   getProducts() {
-    this.http.get(`https://green-api.azurewebsites.net/salesmanagement/products/${this.category}`).subscribe(products => { console.log(products)});
+    this.http.get(`https://green-api.azurewebsites.net/salesmanagement/products/${this.category}`, { headers: new HttpHeaders({
+      'Origin': 'https://localhost:4200/'
+    })}).subscribe(products => { console.log(products)});
   }
 }
