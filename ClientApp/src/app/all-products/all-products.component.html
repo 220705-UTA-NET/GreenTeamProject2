@@ -1,0 +1,8 @@
+<p>all-products works!</p>
+<div class="allProducts">
+    <li *ngFor="let product of allProducts" >
+        <a routerLink="/product" {{product.id}}>
+            {{product.name}}
+        </a>
+    </li>
+</div>

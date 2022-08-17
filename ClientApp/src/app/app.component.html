@@ -1,0 +1,38 @@
+<h1>{{title}}</h1>
+<br>
+<a routerLink="/client">
+  <h4><b>Login</b></h4>
+</a>
+<a routerLink="/cart" class="button fancy-button">
+  <i class = "material-icons">shopping cart</i>
+</a>
+<a routerLink="/checkout">
+  <h3><b>Checkout</b></h3>
+</a>
+<nav>
+  <a routerLink="/dashboard">Home</a>
+  <a routerLink="/allProducts">Shop</a>
+  <a routerLink="/featureProducts">New Products</a>
+  <a routerLink="/promos">Promos</a>
+  <a routerLink="/search">Search</a>
+  <a routerLink="/aboutUs">About Us</a>
+  <a routerLink="/contactUs">Contact Us</a>
+</nav>
+<p *ngIf="Cart"> {{Cart[0]}} </p>
+
+<router-outlet></router-outlet>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<app-footer></app-footer>

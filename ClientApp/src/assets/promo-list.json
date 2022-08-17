@@ -1,0 +1,14 @@
+[
+    {
+        "type": "Holiday Sale",
+        "desc": "20% off Total Purchase"
+    },
+    {
+        "type": "ReturnCustomer",
+        "desc": "10% off Total Purchase"
+    },
+    {
+        "type": "Regular Sale",
+        "desc": "5% off Total Purchase"
+    }
+]
