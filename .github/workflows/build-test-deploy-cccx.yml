@@ -29,7 +29,6 @@ jobs:
         cache-dependency-path: ./client/package-lock.json
     - run: npm --prefix ./client/ ci 
     - run: npm --prefix ./client/ run build --if-present
-    - run: npm --prefix ./client/ test
       
   docker-publish:
       needs: build
