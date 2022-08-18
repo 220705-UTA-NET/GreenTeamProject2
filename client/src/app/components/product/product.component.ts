@@ -17,14 +17,17 @@ export class ProductComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  updateCart() {
-
-    if(this.product.id in this.user.cart) {
-      this.user.cart[this.product.id]++;
-    } else {
-      this.user.cart[this.product.id] = 1;
-    }
+  addToCart() {
     
+    console.log("clicked");
+    if(this.user.cart.has(this.product.id)) {
+      this.user.cart.set(this.product.id, this.user.cart.get(this.product.id) + 1);
+    } else {
+      this.user.cart.set(this.product.id, 1);
+    }
+    console.log(this.user.cart);
+    
+    // call insert invoice post request
   }
 
 }

@@ -11,10 +11,10 @@
 <div class="card product-item shadow p-3 mb-5 bg-white rounded" style="width: 18rem;">
     <img class="card-img-top" src="https://images.unsplash.com/photo-1643408875993-d7566153dd89?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2960&q=80" alt="Card image cap">
     <div class="card-body ">
-      <h5 class="card-title">{{product.productname}}</h5>
+      <h5 class="card-title">{{product.productname}} id is {{product.id}}</h5>
       <em class="card-text">Created by {{product.artistname}}</em>
       <p class="card-text">{{product.description}}</p>
-      <a href="#" class="btn btn-primary" (onclick)="updateCart()">Add to cart</a>
+      <button class="btn btn-primary" (click)="addToCart()">Add to cart</button>
       <strong class="tocart">${{product.unitprice}}</strong>
     </div>
 </div>

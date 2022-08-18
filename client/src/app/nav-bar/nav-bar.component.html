@@ -9,13 +9,14 @@
     </nav>
     <div class="d-flex align-items-center">
         <a class="position-relative">
-           <i *ngIf="userExists" class="fa fa-shopping-cart fa-2x mr-5 text-dark"></i>
+          <i *ngIf="userExists" [routerLink]="['/cart']" class="gg-shopping-cart"></i>
+           <!-- <i *ngIf="userExists" class="fa fa-shopping-cart fa-2x mr-5 text-dark"></i> -->
            
            <!-- going to have to pull cart items number from the cart component so inject it in the navbar component -->
-           <div *ngIf="userExists" class="cart-no">5</div> 
+           <!-- <div *ngIf="userExists" class="cart-no">5</div>  -->
         </a>
     
     <a *ngIf="!userExists" class="btn btn-outline-secondary mr-2" [routerLink]="['/auth/login']">Login</a>
     <a *ngIf="!userExists" class="btn btn-outline-secondary mr-3" [routerLink]="['/auth/signup']">Sign up</a>
-    <a *ngIf="userExists" (click)="logout()" class="btn btn-outline-secondary mr-3">Logout</a>
+    <a *ngIf="userExists" (click)="logout()" class="btn btn-outline-secondary ml-5 mr-3">Logout</a>
   </div>

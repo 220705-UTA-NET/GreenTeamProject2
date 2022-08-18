@@ -10,8 +10,8 @@ export class GlobalService {
   public username: string;
   public name: string;
   public email: string;
-  public token: string
-  public cart: {}
-
+  public token: string;
+  public cart = new Map();
+  
 }
 

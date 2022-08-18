@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Cors;
 
 namespace Green.API.Controllers
 {
-    [EnableCors]
+    //[EnableCors]
     [ApiController]
     [Route("[controller]")]
     public class SalesManagementController : ControllerBase

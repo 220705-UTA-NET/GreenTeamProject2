@@ -71,7 +71,7 @@ export class AuthComponent implements OnInit {
 
   createUserDB(form: NgForm, data: ResponseData) {
     
-    const headerOptions = {
+    const headers = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json'
       })
@@ -88,9 +88,7 @@ export class AuthComponent implements OnInit {
       token: data.idToken
     }
 
-
-
-    this.http.post<any>('https://green-api.azurewebsites.net/User/SignupUser', JSON.stringify(body)).subscribe(responseData => {
+    this.http.post<any>('https://green-api.azurewebsites.net/User/SignupUser', JSON.stringify(body), headers).subscribe(responseData => {
       console.log(responseData);
       // this.globaluser.email = responseData.email
     }, error => {
