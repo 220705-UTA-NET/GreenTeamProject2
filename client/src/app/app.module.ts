@@ -22,6 +22,7 @@ import { PricingComponent } from './components/pricing/pricing.component';
 import { ContactComponent } from './components/contact/contact.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { PromocodeComponent } from './components/promocode/promocode.component';
+import { AboutUsComponent } from './components/about-us/about-us.component';
 
 
 const appRoutes: Routes = [
@@ -36,7 +37,7 @@ const appRoutes: Routes = [
   { path: 'cart', component: CartComponent },
   { path: 'pricing', component: PricingComponent },
   { path: 'contact', component: ContactComponent },
-
+  
 ];
 
 @NgModule({
@@ -57,7 +58,8 @@ const appRoutes: Routes = [
     PricingComponent,
     ContactComponent,
     FooterComponent,
-    PromocodeComponent
+    PromocodeComponent,
+    AboutUsComponent
   ],
   imports: [
     BrowserModule,

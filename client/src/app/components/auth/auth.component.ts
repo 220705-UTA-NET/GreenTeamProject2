@@ -4,6 +4,8 @@ import { NgForm } from '@angular/forms';
 import { AuthService, ResponseData } from './auth.service';
 import { Observable, Subject } from 'rxjs';
 import { User } from './user.model';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Customer } from 'src/app/Customer';
 
 @Component({
   selector: 'app-auth',
@@ -12,7 +14,7 @@ import { User } from './user.model';
 })
 export class AuthComponent implements OnInit {
   
-  constructor(private route: ActivatedRoute, private authService: AuthService, private router: Router) { }
+  constructor(private route: ActivatedRoute, private authService: AuthService, private router: Router, private http: HttpClient) { }
   loggedin: boolean;
   loading: boolean = false;
   error: string = null;
@@ -41,6 +43,21 @@ export class AuthComponent implements OnInit {
       observe = this.authService.login(email, password);
     } else {
       observe = this.authService.signup(email, password);
+
+
+      const headerOptions = {
+        headers: new HttpHeaders({
+          'Content-Type':  'application/json'
+        })
+      }
+
+      const body = {
+        Username: form.value.Username
+      }
+      // post request to insert customer
+      // this.http.post<Customer>('https://green-api.azurewebsites.net/SignupUser', )
+
+
     }
 
     observe.subscribe(data => {
