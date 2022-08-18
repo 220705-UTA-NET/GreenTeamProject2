@@ -6,9 +6,11 @@ using Green.API.Models;
 using Green.Api.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Cors;
 
 namespace Green.API.Controllers
 {
+    [EnableCors]
     [ApiController]
     [Route("[controller]")]
     public class SalesManagementController : ControllerBase
