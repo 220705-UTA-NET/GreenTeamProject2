@@ -21,18 +21,18 @@ namespace Green.Api.Data
             _logger = logger;
         }
 
-        public async Task<StatusCodeResult> GetExistingCustomerAsync(string username, string password)
+        public async Task<StatusCodeResult> GetExistingCustomerAsync(string username)
         {
-            _logger.LogInformation(username + " " + password);
+            _logger.LogInformation(username);
             using SqlConnection connection = new(_connectionString);
 
             await connection.OpenAsync();
 
-            string cmdText = "SELECT * FROM Customers WHERE username=@Username AND password=@Password;";
+            string cmdText = "SELECT * FROM Customers WHERE username=@Username;";
 
             using SqlCommand cmd = new(cmdText, connection);
             cmd.Parameters.AddWithValue("@Username", username);
-            cmd.Parameters.AddWithValue("@Password", password);
+         
 
             using SqlDataReader reader = await cmd.ExecuteReaderAsync();
 
@@ -89,36 +89,36 @@ namespace Green.Api.Data
         }
 
 
-        public async Task<StatusCodeResult> InsertCustomerAsync(string username, string password, string email)
-        {
-            string cmdText = "INSERT INTO Customers (username, password, email) VALUES (@username, @password, @email)";
-            SqlConnection connection = new(_connectionString);
+        //public async Task<StatusCodeResult> InsertCustomerAsync(string username, string password, string email)
+        //{
+        //    string cmdText = "INSERT INTO Customers (username, password, email) VALUES (@username, @password, @email)";
+        //    SqlConnection connection = new(_connectionString);
 
 
-            using SqlCommand cmd = new(cmdText, connection);
-            cmd.Parameters.AddWithValue("@username", username);
-            cmd.Parameters.AddWithValue("@password", password);
-            cmd.Parameters.AddWithValue("@email", email);
+        //    using SqlCommand cmd = new(cmdText, connection);
+        //    cmd.Parameters.AddWithValue("@username", username);
+        //    cmd.Parameters.AddWithValue("@password", password);
+        //    cmd.Parameters.AddWithValue("@email", email);
 
 
-            try
-            {
-                await connection.OpenAsync();
-                await cmd.ExecuteNonQueryAsync();
-            }
-            catch (Exception e)
-            {
+        //    try
+        //    {
+        //        await connection.OpenAsync();
+        //        await cmd.ExecuteNonQueryAsync();
+        //    }
+        //    catch (Exception e)
+        //    {
 
-                _logger.LogError("Error in InsertCustomer while trying to open a connection or execute non query");
-                _logger.LogInformation(e.Message);
-                return new StatusCodeResult(500);
-            }
+        //        _logger.LogError("Error in InsertCustomer while trying to open a connection or execute non query");
+        //        _logger.LogInformation(e.Message);
+        //        return new StatusCodeResult(500);
+        //    }
 
-            await connection.CloseAsync();
-            _logger.LogInformation("Executed InsertCustomerAsync");
-            return new StatusCodeResult(200);
+        //    await connection.CloseAsync();
+        //    _logger.LogInformation("Executed InsertCustomerAsync");
+        //    return new StatusCodeResult(200);
 
-        }
+        //}
         public async Task<IEnumerable<Product>> GetAllProductsAsync()
         {
             List<Product> result = new();
@@ -342,42 +342,40 @@ namespace Green.Api.Data
             return result;
         }
 
-        public async Task<ActionResult<Customer>> LoginUserAsync(Customer customer)
+        public async Task<IEnumerable<Product>> LoginUserCartAsync(int id)
         {
-            string cmdText = "SELECT * from Customer WHERE @username=username AND @password=password;";
+            List<Product> result = new();
+
+            string cmdText = "SELECT Products.product_id, Products.category_id, Products.product_name, Products.[description], Products.artist_id, Products.unit_price from Products join InvoiceLines on Products.product_id=InvoiceLines.product_id where customer_id=@customer_id;";
             SqlConnection connection = new(_connectionString);
+            await connection.OpenAsync();
 
             using SqlCommand cmd = new(cmdText, connection);
-            cmd.Parameters.AddWithValue("@username", customer.Username);
-            cmd.Parameters.AddWithValue("@password", customer.Password);
+            //cmd.Parameters.AddWithValue("@email", customer.Email);
+            //cmd.Parameters.AddWithValue("@token", customer.Token);
+            cmd.Parameters.AddWithValue("@customer_id", id);
 
             using SqlDataReader reader = await cmd.ExecuteReaderAsync();
 
-            Customer? c;
-            try
-            {
-                await connection.OpenAsync();
-                if(await reader.ReadAsync())
-                {
-                    c = new(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetString(6), reader.GetString(3), reader.GetString(4), reader.GetString(5));
-                } else
-                {
-                    return new StatusCodeResult(500);
-                }
-            }
-            catch (Exception e)
-            {
 
-                // if error is that a violation of primary key error -> increment quantity -> return stat 200
-                _logger.LogError("Error in InsertInvoiceLine while trying to open a connection or execute non query");
-                _logger.LogInformation(e.Message);
-                return new StatusCodeResult(500);
+            while (await reader.ReadAsync())
+            {
+                int productId = reader.GetInt32(0);
+                string categoryId = reader.GetString(1);
+                string productname = reader.GetString(2);
+                string description = reader.GetString(3);
+                string artistname = reader.GetString(4);
+                decimal unitprice = reader.GetDecimal(5);
+
+                Product tmpProduct = new(productId, categoryId, productname, description, artistname, unitprice);
+                result.Add(tmpProduct);
             }
 
-            await connection.CloseAsync();
-            _logger.LogInformation("Executed InsertInvoiceLineAsync");
-            return c;
+            _logger.LogInformation("Executed LoginUserCartAsync, returned {0} results", result.Count);
+
+            return result;
         }
+    
 
 
         public async Task<ActionResult<Customer>> SignupUserAsync(Customer customer)
@@ -397,7 +395,7 @@ namespace Green.Api.Data
                 await connection.OpenAsync();
                 if (await reader.ReadAsync())
                 {
-                    c = new(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetString(6), reader.GetString(3), reader.GetString(4), reader.GetString(5));
+                    c = new(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetString(6), reader.GetString(3), reader.GetString(4), reader.GetString(5), reader.GetString(6));
                 }
                 else
                 {

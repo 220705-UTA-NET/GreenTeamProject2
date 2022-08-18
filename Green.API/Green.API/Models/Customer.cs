@@ -9,7 +9,7 @@ namespace Green.API.Models
         public string Name { get; set; }
         public string? Address { get; set; }
         public string? PhoneNumber { get; set; }
-        
+        public string Token { get; set; }
 
         public Customer(){}
         
@@ -24,7 +24,7 @@ namespace Green.API.Models
                        
         }
 
-        public Customer(int id, string username, string password, string email, string name, string address, string phonenumber)
+        public Customer(int id, string username, string password, string email, string name, string address, string phonenumber, string token)
         {
             Id = id;
             Username = username;
@@ -33,7 +33,7 @@ namespace Green.API.Models
             Address = address;
             PhoneNumber = phonenumber;
             Name = name;
-
+            Token = token;
         }
 
 

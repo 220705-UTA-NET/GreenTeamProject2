@@ -1,18 +1,21 @@
 <div class="d-flex flex-column flex-md-row align-items-center justify-content-between p-3 px-md-4 mb-3 bg-white border-bottom box-shadow-sm fixed-top">
-    <img src="/assets/images/logo.png" style="max-height: 70px;" alt="CCCX">
+    <img src="/assets/images/logo.png" style="max-height: 70px;" alt="CCCX" [routerLink]="['/home']">
    
     <nav class="my-2 my-md-0 mr-md-3 text-uppercase" style="font-size: larger;">
-      <a class="p-2 text-dark" href="#">Home</a>
-      <a class="p-2 text-dark" href="#">Shop</a>
-      <a class="p-2 text-dark" href="#">Contact</a>
-      <a class="p-2 text-dark" href="#">Pricing</a>
+      <a class="p-2 text-dark" [routerLink]="['/home']">Home</a>
+      <a class="p-2 text-dark" [routerLink]="['/products', 'ALL']">Shop</a>
+      <a class="p-2 text-dark" [routerLink]="['/contact']">Contact</a>
+      <a class="p-2 text-dark" [routerLink]="['/pricing']">Pricing</a>
     </nav>
     <div class="d-flex align-items-center">
         <a class="position-relative">
-           <i class="fa fa-shopping-cart fa-2x mr-5 text-dark"></i>
-           <div class="cart-no">5</div>
+           <i *ngIf="userExists" class="fa fa-shopping-cart fa-2x mr-5 text-dark"></i>
+           
+           <!-- going to have to pull cart items number from the cart component so inject it in the navbar component -->
+           <div *ngIf="userExists" class="cart-no">5</div> 
         </a>
-       
-    <a class="btn btn-outline-secondary mr-2">Login</a>
-    <a class="btn btn-outline-secondary mr-3">Sign up</a>
+    
+    <a *ngIf="!userExists" class="btn btn-outline-secondary mr-2" [routerLink]="['/auth/login']">Login</a>
+    <a *ngIf="!userExists" class="btn btn-outline-secondary mr-3" [routerLink]="['/auth/signup']">Sign up</a>
+    <a *ngIf="userExists" (click)="logout()" class="btn btn-outline-secondary mr-3">Logout</a>
   </div>

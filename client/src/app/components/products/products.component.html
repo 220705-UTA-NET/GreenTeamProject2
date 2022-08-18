@@ -1,3 +1,6 @@
+<div *ngIf="loading" style="text-align: center;">
+    <app-spinner></app-spinner>
+</div>
 <div class="container-lg product-container">
     <app-product class="product-item" *ngFor="let product of products" [product]="product"></app-product>
 </div>
