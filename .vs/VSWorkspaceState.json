@@ -1,17 +1,11 @@
 {
   "ExpandedNodes": [
     "",
-    "\\Green.API",
-    "\\Green.API\\Green.API",
-    "\\Green.API\\Green.API\\bin",
-    "\\Green.API\\Green.API\\bin\\Debug",
-    "\\Green.API\\Green.API\\bin\\Debug\\net6.0",
-    "\\Green.API\\Green.API\\bin\\Debug\\net6.0\\runtimes",
-    "\\Green.API\\Green.API\\bin\\Debug\\net6.0\\runtimes\\unix",
-    "\\Green.API\\Green.API\\bin\\Debug\\net6.0\\runtimes\\unix\\lib",
-    "\\Green.API\\Green.API\\bin\\Debug\\net6.0\\runtimes\\unix\\lib\\netcoreapp2.1",
-    "\\Green.API\\Green.API\\Data"
+    "\\CCCX",
+    "\\CCCX\\API",
+    "\\CCCX\\Infrastructure",
+    "\\CCCX\\Infrastructure\\Data"
   ],
-  "SelectedNode": "\\Green.API\\Green.API\\Program.cs",
+  "SelectedNode": "\\CCCX\\API\\API.sln",
   "PreviewInSolutionExplorer": false
 }
