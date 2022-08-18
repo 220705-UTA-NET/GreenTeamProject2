@@ -46,7 +46,8 @@
                     <button class="btn btn-primary" type="submit" [disabled]="!userForm.valid">{{ loggedin ? 'Login' : 'Signup'}}</button>
                     <br>
                     <br>
-                    <button class="btn btn-success" (click)="changeView()">{{ loggedin ? 'Signup Instead' : 'Have an account? Login'}}</button>
+                    <button class="btn btn-primary" (click)="changeView()">{{ loggedin ? 'Signup Instead' : 'Have an account? Login'}}</button>
+
                 </div>
     
             </form>
