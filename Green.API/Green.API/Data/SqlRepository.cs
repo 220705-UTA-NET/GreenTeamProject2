@@ -234,6 +234,7 @@ namespace Green.Api.Data
             {
                 _logger.LogError("Error in InsertSalesInvoice while trying to open a connection or execute non query");
                 _logger.LogInformation(e.Message);
+                await connection.CloseAsync();
                 return new StatusCodeResult(500);
             }
 
@@ -302,6 +303,7 @@ namespace Green.Api.Data
                 // if error is that a violation of primary key error -> increment quantity -> return stat 200
                 _logger.LogError("Error in InsertInvoiceLine while trying to open a connection or execute non query");
                 _logger.LogInformation(e.Message);
+                await connection.CloseAsync();
                 return new StatusCodeResult(500);
             }
 
@@ -380,39 +382,56 @@ namespace Green.Api.Data
 
         public async Task<ActionResult<Customer>> SignupUserAsync(Customer customer)
         {
-            string cmdText = "SELECT * from Customer WHERE @username=username AND @password=password;";
+            string cmdText = "INSERT INTO Customers(username, password, name, address, phone, email, token) VALUES(@username, @password, @name, @address, @phone, @email, @token);";
             SqlConnection connection = new(_connectionString);
+            await connection.OpenAsync();
 
             using SqlCommand cmd = new(cmdText, connection);
             cmd.Parameters.AddWithValue("@username", customer.Username);
             cmd.Parameters.AddWithValue("@password", customer.Password);
+            cmd.Parameters.AddWithValue("@name", customer.Name);
+            cmd.Parameters.AddWithValue("@address", customer.Address);
+            cmd.Parameters.AddWithValue("@phone", customer.PhoneNumber);
+            cmd.Parameters.AddWithValue("@email", customer.Email);
+            cmd.Parameters.AddWithValue("@token", customer.Token);
 
-            using SqlDataReader reader = await cmd.ExecuteReaderAsync();
-
-            Customer? c;
             try
             {
-                await connection.OpenAsync();
-                if (await reader.ReadAsync())
-                {
-                    c = new(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetString(6), reader.GetString(3), reader.GetString(4), reader.GetString(5), reader.GetString(6));
-                }
-                else
-                {
-                    return new StatusCodeResult(500);
-                }
+                await cmd.ExecuteNonQueryAsync();
             }
             catch (Exception e)
             {
 
                 // if error is that a violation of primary key error -> increment quantity -> return stat 200
-                _logger.LogError("Error in InsertInvoiceLine while trying to open a connection or execute non query");
+                _logger.LogError("Error in SignupUserAsync while trying to open a connection or execute non query");
                 _logger.LogInformation(e.Message);
+                await connection.CloseAsync();
                 return new StatusCodeResult(500);
             }
 
+
+            string cmdText2 = "SELECT * FROM Customers WHERE token=@token;";
+            using SqlCommand cmd2 = new(cmdText2, connection);
+            cmd2.Parameters.AddWithValue("@token", customer.Token);
+
+            Customer? c;
+            using SqlDataReader reader = await cmd2.ExecuteReaderAsync();
+
+            if (await reader.ReadAsync() == false) return new StatusCodeResult(500);
+            
+            int id = reader.GetInt32(0);
+            string username = reader.GetString(1);
+            string password = reader.GetString(2);
+            string name = reader.GetString(3);
+            string address = reader.GetString(4);
+            string phone = reader.GetString(5);
+            string email = reader.GetString(6);
+            string token = reader.GetString(7);
+
+            c = new(id, username, password, name, address, phone, email, token);
+            
             await connection.CloseAsync();
-            _logger.LogInformation("Executed InsertInvoiceLineAsync");
+            _logger.LogInformation("Executed SignupUser");
             return c;
         }
     }

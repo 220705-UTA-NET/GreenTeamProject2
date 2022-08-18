@@ -102,6 +102,26 @@ namespace Green.API.Controllers
 
         }
 
+        [HttpPost("SignupUser")]
+        public async Task<ActionResult<Customer>> SignupUser([FromBody] Customer c)
+        {
+            ActionResult<Customer> customer;
+            _logger.LogInformation("Hit signup method in the api");
+            try
+            {
+                customer = await _repo.SignupUserAsync(c);
+                if (customer == null) return BadRequest(500);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, e.Message);
+                return StatusCode(500);
+            }
+
+            return customer;
+
+        }
+
     }
 }
 
