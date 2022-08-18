@@ -21,7 +21,7 @@ export interface ResponseData {
 export class AuthService {
     
     user = new Subject<User>();
-
+    
     constructor(private http: HttpClient, private route: Router) {}
     
     signup(email: string, password: string) {
