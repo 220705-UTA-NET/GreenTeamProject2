@@ -15,13 +15,13 @@ export class ProductsComponent implements OnInit {
 
   // fetch the products of the selected category from the api/database and set it equal to products (replace MockProducts)
   products: Product[];
-
+  loading: boolean = false;
   category: string = "";
-  responsedata = "";
+
   constructor(private route: ActivatedRoute, private http: HttpClient) { }
 
   ngOnInit(): void {
-  
+    
     // set the category of the current route
     this.category = this.route.snapshot.params['category'];
     console.log(this.category);
@@ -36,24 +36,25 @@ export class ProductsComponent implements OnInit {
   }
 
   getAllProducts() {
+    this.loading = true;
     this.http.get(`https://green-api.azurewebsites.net/salesmanagement/getallproducts`).pipe(map(responseData => {
       let arr = [];
       for(const o in responseData) {
         arr.push({...responseData[o]});
       }
       return arr;
-    })).subscribe(products => { console.log(typeof(products)); console.log(products); this.products = products;});
+    })).subscribe(products => { console.log(typeof(products)); console.log(products); this.products = products; this.loading = false;});
   }
   
   getProducts() {
-    
+    this.loading = true;
     this.http.get(`https://green-api.azurewebsites.net/salesmanagement/products/${this.category}`).pipe(map(responseData => {
       let arr = [];
       for(const o in responseData) {
         arr.push({...responseData[o]});
       }
       return arr;
-    })).subscribe(products => { console.log(typeof(products)); console.log(products); this.products = products;});
+    })).subscribe(products => { console.log(typeof(products)); console.log(products); this.products = products; this.loading = false;});
   }
 }
 

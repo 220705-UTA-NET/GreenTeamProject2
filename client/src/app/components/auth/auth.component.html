@@ -1,0 +1,31 @@
+<div class="container-grid">
+    
+        <div class="col-sm col-md-5">
+            <div *ngIf="loading" style="text-align: center;" class="spin">
+                <app-spinner></app-spinner>
+            </div>
+            <div *ngIf="error" class="alert alert-danger">
+                <p>{{error}}</p>
+            </div>
+            <form #userForm="ngForm" (ngSubmit)="submitForm(userForm)" *ngIf="!loading">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" class="form-control" ngModel name="email" required email>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" class="form-control" ngModel name="password" required minlength="6">
+                </div>
+                <div>
+                    <button class="btn btn-primary" type="submit" [disabled]="!userForm.valid">{{ loggedin ? 'Login' : 'Signup'}}</button>
+                    <br>
+                    <br>
+                    <button class="btn btn-primary" (click)="changeView()">{{ loggedin ? 'Signup Instead' : 'Have an account? Login'}}</button>
+                </div>
+    
+            </form>
+        
+    </div>
+    <img src="https://images.unsplash.com/photo-1486520299386-6d106b22014b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1469&q=80" alt="photo of mountain">
+
+</div>
