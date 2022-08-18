@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Green.API.Controllers
 {
-    //[EnableCors]
+    [EnableCors]
     [ApiController]
     [Route("[controller]")]
     public class UserController : ControllerBase
