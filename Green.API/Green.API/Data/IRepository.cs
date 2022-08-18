@@ -12,11 +12,13 @@ namespace Green.Api.Data
         //Task<StatusCodeResult> GetExistingCustomerAsync(string username, string password);
         //Task<IEnumerable<InvoiceLine>> GetAllInvoiceLinesAsync();
         Task<IEnumerable<Product>> GetAllProductsAsync();
+        Task<Product> GetAProductAsync(int productid);
         Task<IEnumerable<SalesInvoice>> GetAllSalesInvoicesAsync();
         Task<StatusCodeResult> InsertSalesInvoiceAsync(DateTime invoicedate, int customerid, string paymenttype, decimal totalamount);
         //Task<StatusCodeResult> InsertCustomerAsync(string username, string password, string email);
         Task<StatusCodeResult> InsertInvoiceLineAsync(int invoice_number, int productid, int quantity, decimal amount);
         Task<IEnumerable<Product>> GetProductsOfCategoryAsync(string category);
+
         Task<IEnumerable<Product>> LoginUserCartAsync(int id);
         Task<ActionResult<Customer>> SignupUserAsync(Customer customer);
     }
