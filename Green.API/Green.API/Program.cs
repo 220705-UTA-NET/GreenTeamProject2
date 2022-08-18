@@ -4,7 +4,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 // Add services to the container.
-string connectionString = File.ReadAllText("/Users/brandon/connection.txt");
+string connectionString = builder.Configuration.GetConnectionString("dbURL");
 //builder.Configuration.GetConnectionString("dbURL");
 //File.ReadAllText("/Users/brandon/connection.txt");
 
