@@ -1,7 +1,11 @@
+using Green.Api.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors();
+
 // Add services to the container.
-string connectionString = File.ReadAllText("C:/Revature/220705/connectionstrings/P2.txt");
+string connectionString = builder.Configuration.GetConnectionString("dbURL");
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -11,12 +15,15 @@ builder.Services.AddSingleton<IRepository>(sp => new SqlRepository(connectionStr
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+app.UseSwagger();
+app.UseSwaggerUI();
+
+app.UseCors(builder =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+    builder.AllowAnyHeader();
+    builder.AllowAnyOrigin();
+    builder.AllowAnyMethod();
+});
 
 app.UseHttpsRedirection();
 

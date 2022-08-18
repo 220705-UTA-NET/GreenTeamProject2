@@ -1,6 +1,11 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Green.API.Models;
 using Green.Api.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace Green.API.Controllers
 {
@@ -9,8 +14,8 @@ namespace Green.API.Controllers
     public class SalesManagementController : ControllerBase
     {
 
-       private readonly IRepository _repo;
-       private readonly ILogger<SalesManagementController> _logger;
+        private readonly IRepository _repo;
+        private readonly ILogger<SalesManagementController> _logger;
 
         // Constructor
         public SalesManagementController(IRepository repo, ILogger<SalesManagementController> logger)
@@ -20,24 +25,13 @@ namespace Green.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Customer>>> GetAllCustomers()
+        public ActionResult Index()
         {
-            IEnumerable<Customer> customers;
-
-            try
-            {
-                customers = await _repo.GetAllCustomersAsync();
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, e.Message);
-                return StatusCode(500);
-            }
-
-            return customers.ToList();
-
+            return Content("Connected to SalesManagement Controller");
         }
-        [HttpGet]
+
+        
+        [HttpGet("getallproducts")]
         public async Task<ActionResult<IEnumerable<Product>>> GetAllProducts()
         {
             IEnumerable<Product> products;
@@ -55,7 +49,7 @@ namespace Green.API.Controllers
             return products.ToList();
 
         }
-        [HttpGet]
+        [HttpGet("getallsalesinvoices")]
         public async Task<ActionResult<IEnumerable<SalesInvoice>>> GetAllSalesInvoices()
         {
             IEnumerable<SalesInvoice> salesinvoices;
@@ -73,32 +67,32 @@ namespace Green.API.Controllers
             return salesinvoices.ToList();
         }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<InvoiceLine>>> GetAllInvoiceLines()
-        {
-            IEnumerable<InvoiceLine> invoicelines;
+        //[HttpGet("getallinvoiceslines")]
+        //public async Task<ActionResult<IEnumerable<InvoiceLine>>> GetAllInvoiceLines()
+        //{
+        //    IEnumerable<InvoiceLine> invoicelines;
 
+        //    try
+        //    {
+        //        invoicelines = await _repo.GetAllInvoiceLinesAsync();
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        _logger.LogError(e, e.Message);
+        //        return StatusCode(500);
+        //    }
+
+        //    return invoicelines.ToList();
+        //}
+
+
+        // this is wrong
+        [HttpPost("{username}/{password}/{email}")]
+        public async Task<ActionResult> PostCustomer(string username, string password, string email)// [FromBody]
+        {
             try
             {
-                invoicelines = await _repo.GetAllInvoiceLinesAsync();
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, e.Message);
-                return StatusCode(500);
-            }
-
-            return invoicelines.ToList();
-        }
-        
-
-
-        [HttpPost]
-        public async Task<ActionResult> PostCustomer(string username, string password)
-        {
-            try
-            {
-                StatusCodeResult rep = await _repo.InsertCustomerAsync(username,password); 
+                StatusCodeResult rep = await _repo.InsertCustomerAsync(username, password, email);
                 if (rep.StatusCode == 500) return StatusCode(500, "Customer could not be inserted!");
             }
             catch (Exception e)
@@ -109,13 +103,13 @@ namespace Green.API.Controllers
             }
             return StatusCode(200);
         }
-       
-        [HttpPost]
+
+        [HttpPost("{invoicedate}/{customerid}/{paymenttype}/{totalamount}")]
         public async Task<ActionResult> PostSalesInvoice(DateTime invoicedate, int customerid, string paymenttype, decimal totalamount)
         {
-             try
+            try
             {
-                StatusCodeResult rep = await _repo.InsertSalesInvoiceAsync(invoicedate,customerid,paymenttype,totalamount); 
+                StatusCodeResult rep = await _repo.InsertSalesInvoiceAsync(invoicedate, customerid, paymenttype, totalamount);
                 if (rep.StatusCode == 500) return StatusCode(500, "SalesInvoice could not be inserted!");
             }
             catch (Exception e)
@@ -126,12 +120,14 @@ namespace Green.API.Controllers
             }
             return StatusCode(200);
         }
-        [HttpPost]
-        public async Task<ActionResult> PostInvoiceLine(int productid, int quantity)
+
+
+        [HttpPost("insertinvoice")]
+        public async Task<ActionResult> PostInvoiceLine([FromBody] InvoiceLine invoice)
         {
             try
             {
-                StatusCodeResult rep = await _repo.InsertInvoiceLineAsync(productid,quantity); 
+                StatusCodeResult rep = await _repo.InsertInvoiceLineAsync(invoice.InvoiceNumber, invoice.ProductId, invoice.Quantity, invoice.Amount);
                 if (rep.StatusCode == 500) return StatusCode(500, "InvoiceLine could not be inserted!");
             }
             catch (Exception e)
@@ -141,6 +137,28 @@ namespace Green.API.Controllers
                 return StatusCode(500, "InvoiceLine could not be inserted!");
             }
             return StatusCode(200);
+        }
+
+        [HttpGet("products/{category}")]
+        public async Task<ActionResult<IEnumerable<Product>>> GetProductsOfCategory(string category)
+        {
+
+            IEnumerable<Product> products;
+
+            try
+            {
+                products = await _repo.GetProductsOfCategoryAsync(category);
+                if (products == null || !products.Any()) return BadRequest(500);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, e.Message);
+                return StatusCode(500);
+            }
+
+            return products.ToList();
+
+
         }
     }
 }
