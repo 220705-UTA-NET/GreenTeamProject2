@@ -4,6 +4,8 @@ import { NgForm } from '@angular/forms';
 import { AuthService, ResponseData } from './auth.service';
 import { Observable, Subject } from 'rxjs';
 import { User } from './user.model';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Customer } from 'src/app/Customer';
 
 @Component({
   selector: 'app-auth',
@@ -12,7 +14,7 @@ import { User } from './user.model';
 })
 export class AuthComponent implements OnInit {
   
-  constructor(private route: ActivatedRoute, private authService: AuthService, private router: Router) { }
+  constructor(private route: ActivatedRoute, private authService: AuthService, private router: Router, private http: HttpClient) { }
   loggedin: boolean;
   loading: boolean = false;
   error: string = null;
@@ -29,6 +31,7 @@ export class AuthComponent implements OnInit {
   }
 
   submitForm(form: NgForm) {
+    console.log(form.value);
     if(!form.valid) return;
     const email = form.value.email;
     const password = form.value.password;
@@ -44,7 +47,30 @@ export class AuthComponent implements OnInit {
     }
 
     observe.subscribe(data => {
-      console.log(data); this.loading = false;
+      console.log(data); 
+      this.loading = false;
+
+      const headerOptions = {
+        headers: new HttpHeaders({
+          'Content-Type':  'application/json'
+        })
+      }
+
+      const body = {
+        Username: form.value.username,
+        Password: form.value.password,
+        Name: form.value.name,
+        Address: form.value.address,
+        Email: form.value.email,
+        Phone: form.value.phone,
+        Token: data.idToken
+      }
+
+      //https://green-api.azurewebsites.net/SignupUser
+      this.http.post<Customer>('https://localhost:7079/User/SignupUser', body, headerOptions).subscribe(responseData => {
+        console.log(responseData);
+      });
+
       // upon login or singup, go to user cart page
       this.router.navigate(['/cart']);
     }, error => { 
