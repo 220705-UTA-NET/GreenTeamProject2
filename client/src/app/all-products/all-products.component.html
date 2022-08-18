@@ -1,0 +1,10 @@
+<p>all-products works!</p>
+<div class="allProducts">
+    <li *ngFor="let product of allProducts" >
+        <img (click)="addProductToCart(product.id)" src="/assets/abstract1.jpg">
+        <a routerLink="/product">
+            {{product.name}}
+        </a>
+    </li>
+</div>
+
