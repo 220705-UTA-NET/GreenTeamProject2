@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { GlobalService } from 'src/app/shared/globalUser/globalUser.service';
 
 @Component({
   selector: 'app-pricing',
@@ -7,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PricingComponent implements OnInit {
 
-  constructor() { }
+  constructor(public user: GlobalService) { }
 
   ngOnInit(): void {
   }

@@ -6,6 +6,7 @@ import { Observable, Subject } from 'rxjs';
 import { User } from './user.model';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Customer } from 'src/app/Customer';
+import { GlobalService } from 'src/app/shared/globalUser/globalUser.service';
 
 @Component({
   selector: 'app-auth',
@@ -14,7 +15,7 @@ import { Customer } from 'src/app/Customer';
 })
 export class AuthComponent implements OnInit {
   
-  constructor(private route: ActivatedRoute, private authService: AuthService, private router: Router, private http: HttpClient) { }
+  constructor(private globaluser: GlobalService, private route: ActivatedRoute, private authService: AuthService, private router: Router, private http: HttpClient) { }
   loggedin: boolean;
   loading: boolean = false;
   error: string = null;
@@ -35,7 +36,7 @@ export class AuthComponent implements OnInit {
     if(!form.valid) return;
     const email = form.value.email;
     const password = form.value.password;
-    
+
     let observe: Observable<ResponseData>;
  
     this.loading = true;
@@ -47,30 +48,15 @@ export class AuthComponent implements OnInit {
     }
 
     observe.subscribe(data => {
-      console.log(data); 
+      console.log(data);
       this.loading = false;
-
-      const headerOptions = {
-        headers: new HttpHeaders({
-          'Content-Type':  'application/json'
-        })
+      
+      if(!this.loggedin) {
+        // signup
+        this.createUserDB(form, data);
+      } else {
+        this.getUserInfoFromDB();
       }
-
-      const body = {
-        Username: form.value.username,
-        Password: form.value.password,
-        Name: form.value.name,
-        Address: form.value.address,
-        Email: form.value.email,
-        Phone: form.value.phone,
-        Token: data.idToken
-      }
-
-      //https://green-api.azurewebsites.net/SignupUser
-      this.http.post<Customer>('https://green-api.azurewebsites.net/SignupUser', body, headerOptions).subscribe(responseData => {
-        console.log(responseData);
-      });
-
       // upon login or singup, go to user cart page
       this.router.navigate(['/cart']);
     }, error => { 
@@ -80,6 +66,35 @@ export class AuthComponent implements OnInit {
     });
     
     form.reset();
+  }
+
+  createUserDB(form: NgForm, data: ResponseData) {
+    
+    const headerOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json'
+      })
+    }
+
+    const body = {
+      id: 0,
+      username: form.value.username,
+      password: form.value.password,
+      email: form.value.email,
+      name: form.value.name,
+      address: form.value.address,
+      phoneNumber: form.value.phone,
+      token: data.idToken
+    }
+
+    this.http.post<any>('https://green-api.azurewebsites.net/User/SignupUser', body, headerOptions).subscribe(responseData => {
+      console.log(responseData);
+      // this.globaluser.email = responseData.email
+    });
+  }
+
+  getUserInfoFromDB() {
+    
   }
 
 }
