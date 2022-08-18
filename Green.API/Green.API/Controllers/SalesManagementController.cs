@@ -14,13 +14,8 @@ namespace Green.API.Controllers
     public class SalesManagementController : ControllerBase
     {
 
-<<<<<<< HEAD
        private readonly IRepository _repo;
        private readonly ILogger<SalesManagementController> _logger;
-=======
-        private readonly IRepository _repo;
-        private readonly ILogger<SalesManagementController> _logger;
->>>>>>> origin/german
 
         // Constructor
         public SalesManagementController(IRepository repo, ILogger<SalesManagementController> logger)
@@ -29,7 +24,11 @@ namespace Green.API.Controllers
             _logger = logger;
         }
 
-<<<<<<< HEAD
+        public ActionResult Index()
+        {
+           return Content("Connected to SalesManagement Controller");
+        }
+
         [HttpGet("{username}/{password}")]
         public async Task<ActionResult> GetExistingCustomer(string username, string password)
         {
@@ -55,8 +54,6 @@ namespace Green.API.Controllers
         }
 
 
-=======
->>>>>>> origin/german
         // Two ways to access the endpoint
         // [HttpGet("/getallcustomers")] -> http://localhost:9999/getallcustomers
         // [HttpGet("getallcustomers")]  -> http://localhost:9999/SalesManagement/getallcustomers
@@ -69,7 +66,7 @@ namespace Green.API.Controllers
             try
             {
                 customers = await _repo.GetAllCustomersAsync();
-                if (customers == null || !customers.Any()) return BadRequest(500);
+                //if (customers == null || !customers.Any()) return BadRequest(500);
             }
             catch (Exception e)
             {
@@ -133,11 +130,7 @@ namespace Green.API.Controllers
 
             return invoicelines.ToList();
         }
-<<<<<<< HEAD
         
-=======
-
->>>>>>> origin/german
 
 
         [HttpPost("{username}/{password}/{email}")]
@@ -145,11 +138,7 @@ namespace Green.API.Controllers
         {
             try
             {
-<<<<<<< HEAD
                 StatusCodeResult rep = await _repo.InsertCustomerAsync(username,password, email); 
-=======
-                StatusCodeResult rep = await _repo.InsertCustomerAsync(username, password, email);
->>>>>>> origin/german
                 if (rep.StatusCode == 500) return StatusCode(500, "Customer could not be inserted!");
             }
             catch (Exception e)
@@ -160,7 +149,6 @@ namespace Green.API.Controllers
             }
             return StatusCode(200);
         }
-<<<<<<< HEAD
        
         [HttpPost("{invoicedate}/{customerid}/{paymenttype}/{totalamount}")]
         public async Task<ActionResult> PostSalesInvoice(DateTime invoicedate, int customerid, string paymenttype, decimal totalamount)
@@ -168,15 +156,6 @@ namespace Green.API.Controllers
              try
             {
                 StatusCodeResult rep = await _repo.InsertSalesInvoiceAsync(invoicedate, customerid, paymenttype, totalamount); 
-=======
-
-        [HttpPost("{invoicedate}/{customerid}/{paymenttype}/{totalamount}")]
-        public async Task<ActionResult> PostSalesInvoice(DateTime invoicedate, int customerid, string paymenttype, decimal totalamount)
-        {
-            try
-            {
-                StatusCodeResult rep = await _repo.InsertSalesInvoiceAsync(invoicedate, customerid, paymenttype, totalamount);
->>>>>>> origin/german
                 if (rep.StatusCode == 500) return StatusCode(500, "SalesInvoice could not be inserted!");
             }
             catch (Exception e)
@@ -193,11 +172,7 @@ namespace Green.API.Controllers
         {
             try
             {
-<<<<<<< HEAD
                 StatusCodeResult rep = await _repo.InsertInvoiceLineAsync(productid,quantity); 
-=======
-                StatusCodeResult rep = await _repo.InsertInvoiceLineAsync(productid, quantity);
->>>>>>> origin/german
                 if (rep.StatusCode == 500) return StatusCode(500, "InvoiceLine could not be inserted!");
             }
             catch (Exception e)
