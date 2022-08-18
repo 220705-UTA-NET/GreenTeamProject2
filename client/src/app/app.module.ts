@@ -23,6 +23,7 @@ import { ContactComponent } from './components/contact/contact.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { PromocodeComponent } from './components/promocode/promocode.component';
 import { AboutUsComponent } from './components/about-us/about-us.component';
+import { UserService } from './shared/user/user.service';
 
 
 const appRoutes: Routes = [
@@ -69,7 +70,7 @@ const appRoutes: Routes = [
     HttpClientModule,
     FormsModule,
   ],
-  providers: [],
+  providers: [UserService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
