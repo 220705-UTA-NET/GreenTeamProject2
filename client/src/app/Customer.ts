@@ -1,10 +1,10 @@
 export interface Customer {
-    Id?: number,
-    Username: string,
-    Password: string,
-    Name: string,
-    Address: string,
-    Phone: string,
-    Email: string,
-    Token: string
+    id?: number,
+    username: string,
+    password: string,
+    name: string,
+    address: string,
+    phoneNumber: string,
+    email: string,
+    token: string
 }

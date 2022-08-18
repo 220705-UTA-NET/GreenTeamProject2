@@ -31,6 +31,7 @@ export class AuthComponent implements OnInit {
   }
 
   submitForm(form: NgForm) {
+    console.log(form.value);
     if(!form.valid) return;
     const email = form.value.email;
     const password = form.value.password;
@@ -43,7 +44,11 @@ export class AuthComponent implements OnInit {
       observe = this.authService.login(email, password);
     } else {
       observe = this.authService.signup(email, password);
+    }
 
+    observe.subscribe(data => {
+      console.log(data); 
+      this.loading = false;
 
       const headerOptions = {
         headers: new HttpHeaders({
@@ -52,16 +57,20 @@ export class AuthComponent implements OnInit {
       }
 
       const body = {
-        Username: form.value.Username
+        Username: form.value.username,
+        Password: form.value.password,
+        Name: form.value.name,
+        Address: form.value.address,
+        Email: form.value.email,
+        Phone: form.value.phone,
+        Token: data.idToken
       }
-      // post request to insert customer
-      // this.http.post<Customer>('https://green-api.azurewebsites.net/SignupUser', )
 
+      //https://green-api.azurewebsites.net/SignupUser
+      this.http.post<Customer>('https://localhost:7079/User/SignupUser', body, headerOptions).subscribe(responseData => {
+        console.log(responseData);
+      });
 
-    }
-
-    observe.subscribe(data => {
-      console.log(data); this.loading = false;
       // upon login or singup, go to user cart page
       this.router.navigate(['/cart']);
     }, error => { 
