@@ -33,26 +33,26 @@ namespace Green.API.Controllers
         }
 
 
-        [HttpGet("{username}/{password}")]
-        public async Task<ActionResult> GetExistingCustomer(string username, string password)
-        {
+        //[HttpGet("{username}/{password}")]
+        //public async Task<ActionResult> GetExistingCustomer(string username, string password)
+        //{
 
-            try
-            {
-                StatusCodeResult st = await _repo.GetExistingCustomerAsync(username, password);
-                if (st.StatusCode != 200) return StatusCode(500, "User not found");
+        //    try
+        //    {
+        //        StatusCodeResult st = await _repo.GetExistingCustomerAsync(username, password);
+        //        if (st.StatusCode != 200) return StatusCode(500, "User not found");
 
-            }
-            catch (Exception e)
-            {
+        //    }
+        //    catch (Exception e)
+        //    {
 
-                _logger.LogError(e, e.Message);
-                return StatusCode(500);
-            }
+        //        _logger.LogError(e, e.Message);
+        //        return StatusCode(500);
+        //    }
 
-            _logger.LogInformation("Executed GetExistingCustomer");
-            return StatusCode(200, "User found");
-        }
+        //    _logger.LogInformation("Executed GetExistingCustomer");
+        //    return StatusCode(200, "User found");
+        //}
 
 
         // Two ways to access the endpoint
@@ -79,25 +79,26 @@ namespace Green.API.Controllers
 
         }
 
-        //[HttpPost("login")]
-        //public async Task<ActionResult<Customer>> LoginUser([FromBody] Customer customer)
-        //{
-        //    Customer resultCustomer;
 
-        //    try
-        //    {
-        //        resultCustomer = await _repo.LoginUserAsync(customer);
-        //        if (resultCustomer == null) return BadRequest(500);
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        _logger.LogError(e, e.Message);
-        //        return StatusCode(500);
-        //    }
+        [HttpPost("login/{id}")]
+        public async Task<ActionResult<IEnumerable<Product>>> LoginUserCart(int id)
+        {
+            IEnumerable<Product> result;
 
-        //    return resultCustomer;
+            try
+            {
+                result = await _repo.LoginUserCartAsync(id);
+                if (result == null) return BadRequest(500);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, e.Message);
+                return StatusCode(500);
+            }
 
-        //}
+            return result.ToList();
+
+        }
 
     }
 }

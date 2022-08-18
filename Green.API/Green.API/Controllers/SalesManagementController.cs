@@ -86,24 +86,6 @@ namespace Green.API.Controllers
         //}
 
 
-        // this is wrong
-        [HttpPost("{username}/{password}/{email}")]
-        public async Task<ActionResult> PostCustomer(string username, string password, string email)// [FromBody]
-        {
-            try
-            {
-                StatusCodeResult rep = await _repo.InsertCustomerAsync(username, password, email);
-                if (rep.StatusCode == 500) return StatusCode(500, "Customer could not be inserted!");
-            }
-            catch (Exception e)
-            {
-                _logger.LogInformation("Error encountered: connecting to database in InsertCustomer");
-                _logger.LogError(e.Message);
-                return StatusCode(500, "Customer could not be inserted!");
-            }
-            return StatusCode(200);
-        }
-
         [HttpPost("{invoicedate}/{customerid}/{paymenttype}/{totalamount}")]
         public async Task<ActionResult> PostSalesInvoice(DateTime invoicedate, int customerid, string paymenttype, decimal totalamount)
         {

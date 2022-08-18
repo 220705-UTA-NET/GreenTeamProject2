@@ -21,16 +21,22 @@ import { AuthComponent } from './components/auth/auth.component';
 import { Spinner } from './shared/load-icon/spinner.component';
 import { CartComponent } from './components/cart/cart.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { PricingComponent } from './components/pricing/pricing.component';
+import { ContactComponent } from './components/contact/contact.component';
 
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent},
+  { path: 'home', component: HomeComponent},
   { path: 'navbar', component: NavBarComponent },
   { path: 'products/:category', component: ProductsComponent},
   { path: 'signin', component: SigninComponent },
   { path: 'signup', component: SignupComponent },
   { path: 'auth', component: AuthComponent },
   { path: 'auth/:type', component: AuthComponent },
+  { path: 'cart', component: CartComponent },
+  { path: 'pricing', component: PricingComponent },
+  { path: 'contact', component: ContactComponent },
 
 ];
 
@@ -48,7 +54,9 @@ const appRoutes: Routes = [
     AuthComponent,
     Spinner,
     CartComponent,
-    DashboardComponent
+    DashboardComponent,
+    PricingComponent,
+    ContactComponent
   ],
   imports: [
     BrowserModule,
