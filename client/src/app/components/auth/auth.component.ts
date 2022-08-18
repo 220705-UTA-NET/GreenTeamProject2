@@ -67,7 +67,7 @@ export class AuthComponent implements OnInit {
       }
 
       //https://green-api.azurewebsites.net/SignupUser
-      this.http.post<Customer>('https://green-api.azurewebsites.net/SignupUser', body, headerOptions).subscribe(responseData => {
+      this.http.post<Customer>('https://green-api.azurewebsites.net/User/SignupUser', body, headerOptions).subscribe(responseData => {
         console.log(responseData);
       });
 
