@@ -49,6 +49,23 @@ namespace Green.API.Controllers
             return products.ToList();
 
         }
+        [HttpGet("products/{productid}")]
+        public async Task<ActionResult<Product>> GetAllProducts(int productid)
+        {
+            Product product;
+            try
+            {
+                product = await _repo.GetAProductAsync(productid);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, e.Message);
+                return StatusCode(500);
+            }
+
+            return product;
+
+        }
         [HttpGet("getallsalesinvoices")]
         public async Task<ActionResult<IEnumerable<SalesInvoice>>> GetAllSalesInvoices()
         {
