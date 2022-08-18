@@ -88,14 +88,18 @@ export class AuthComponent implements OnInit {
       token: data.idToken
     }
 
-    this.http.post<any>('https://green-api.azurewebsites.net/User/SignupUser', body, headerOptions).subscribe(responseData => {
+
+
+    this.http.post<any>('https://green-api.azurewebsites.net/User/SignupUser', JSON.stringify(body)).subscribe(responseData => {
       console.log(responseData);
       // this.globaluser.email = responseData.email
+    }, error => {
+      console.log(error);
     });
   }
 
   getUserInfoFromDB() {
-    
+
   }
 
 }
