@@ -150,6 +150,33 @@ namespace Green.Api.Data
 
             return result;
         }
+        public async Task<Product> GetAProductAsync(int productid)
+        {
+            using SqlConnection connection = new(_connectionString);
+            await connection.OpenAsync();
+            Product tmpProduct = new Product();
+            string cmdText = "SELECT product_name, description, category_id, unit_price, artist_id FROM Products where product_id = @productid;";
+            using SqlCommand cmd = new(cmdText, connection);
+            using SqlDataReader reader = await cmd.ExecuteReaderAsync();
+
+            while (await reader.ReadAsync())
+            {
+                string productname = reader.GetString(0);
+                string description = reader.GetString(1);
+                string category = reader.GetString(2);
+                decimal unitprice = reader.GetDecimal(3);
+                string artistname = reader.GetString(4);
+
+                tmpProduct = new(category, productname, description, artistname, unitprice);
+                await connection.CloseAsync();
+
+                _logger.LogInformation("Executed GetAProductAsync, returned a results");
+
+                return tmpProduct;
+                
+            }
+            return tmpProduct;
+        }
 
         public async Task<IEnumerable<SalesInvoice>> GetAllSalesInvoicesAsync()
         {
