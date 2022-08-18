@@ -2,12 +2,12 @@ using Green.Api.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddCors();
 
 // Add services to the container.
 string connectionString = builder.Configuration.GetConnectionString("dbURL");
 //File.ReadAllText("/Users/brandon/connection.txt");
 
+builder.Services.AddCors();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -21,9 +21,9 @@ app.UseSwaggerUI();
 
 app.UseCors(builder =>
 {
-    builder.AllowAnyHeader();
     builder.AllowAnyOrigin();
     builder.AllowAnyMethod();
+    builder.AllowAnyHeader();
 });
 
 app.UseHttpsRedirection();

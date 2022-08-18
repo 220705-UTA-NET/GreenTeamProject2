@@ -12,9 +12,6 @@ import { ProductsComponent } from './components/products/products.component';
 import { HomeComponent } from './components/home/home.component';
 import { FillNavbarComponent } from './components/fill-navbar/fill-navbar.component';
 import { HttpClientModule } from '@angular/common/http';
-import { AngularFireAuthModule } from '@angular/fire/compat/auth';
-import { AngularFireModule } from '@angular/fire/compat';
-import { environment } from 'src/environments/environment';
 import { SigninComponent } from './components/signin/signin.component';
 import { SignupComponent } from './components/signup/signup.component';
 import { AuthComponent } from './components/auth/auth.component';
@@ -23,6 +20,8 @@ import { CartComponent } from './components/cart/cart.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { PricingComponent } from './components/pricing/pricing.component';
 import { ContactComponent } from './components/contact/contact.component';
+import { FooterComponent } from './components/footer/footer.component';
+import { PromocodeComponent } from './components/promocode/promocode.component';
 
 
 const appRoutes: Routes = [
@@ -56,7 +55,9 @@ const appRoutes: Routes = [
     CartComponent,
     DashboardComponent,
     PricingComponent,
-    ContactComponent
+    ContactComponent,
+    FooterComponent,
+    PromocodeComponent
   ],
   imports: [
     BrowserModule,
@@ -64,8 +65,6 @@ const appRoutes: Routes = [
     BrowserAnimationsModule,
     RouterModule.forRoot(appRoutes),
     HttpClientModule,
-    AngularFireAuthModule,
-    AngularFireModule.initializeApp(environment.firebaseConfig),
     FormsModule,
   ],
   providers: [],

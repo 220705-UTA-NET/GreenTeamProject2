@@ -4,12 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using Green.Api.Data;
 using Green.API.Models;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Green.API.Controllers
 {
+    [EnableCors]
     [ApiController]
     [Route("[controller]")]
     public class UserController : ControllerBase
