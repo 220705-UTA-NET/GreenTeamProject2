@@ -20,6 +20,8 @@ import { CartComponent } from './components/cart/cart.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { PricingComponent } from './components/pricing/pricing.component';
 import { ContactComponent } from './components/contact/contact.component';
+import { FooterComponent } from './components/footer/footer.component';
+import { PromocodeComponent } from './components/promocode/promocode.component';
 
 
 const appRoutes: Routes = [
@@ -53,7 +55,9 @@ const appRoutes: Routes = [
     CartComponent,
     DashboardComponent,
     PricingComponent,
-    ContactComponent
+    ContactComponent,
+    FooterComponent,
+    PromocodeComponent
   ],
   imports: [
     BrowserModule,
