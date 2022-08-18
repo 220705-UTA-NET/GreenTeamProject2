@@ -57,6 +57,7 @@ export class AuthComponent implements OnInit {
       } else {
         this.getUserInfoFromDB();
       }
+
       // upon login or singup, go to user cart page
       this.router.navigate(['/cart']);
     }, error => { 
