@@ -39,6 +39,11 @@ const appRoutes: Routes = [
   { path: 'cart', component: CartComponent },
   { path: 'pricing', component: PricingComponent },
   { path: 'contact', component: ContactComponent },
+  { path: 'cart', component: CartComponent },
+  { path: 'promocode', component: PromocodeComponent },
+  { path: 'footer', component: FooterComponent },
+  { path: 'dashboard', component: DashboardComponent },
+
   
 ];
 

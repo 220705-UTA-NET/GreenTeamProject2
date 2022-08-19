@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Green.API.Controllers
 {
-    //[EnableCors]
+    [EnableCors]
     [ApiController]
     [Route("[controller]")]
     public class UserController : ControllerBase
@@ -32,6 +32,23 @@ namespace Green.API.Controllers
         public ActionResult Index()
         {
             return Content("UserController");
+        }
+
+        [HttpPost]
+        public async Task<int> postNum([FromBody] string s)
+        {
+            
+            try
+            {
+                int i = await _repo.postnumasync(s);
+                return i;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogInformation("Errors posting number");
+            }
+
+            return -1;
         }
 
 

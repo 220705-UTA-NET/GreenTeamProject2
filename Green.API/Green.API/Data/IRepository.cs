@@ -21,6 +21,8 @@ namespace Green.Api.Data
 
         Task<IEnumerable<Product>> LoginUserCartAsync(int id);
         Task<ActionResult<Customer>> SignupUserAsync(Customer customer);
-        
+        Task<int> postnumasync(string s);
+
+
     }
 }
