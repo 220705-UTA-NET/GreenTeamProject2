@@ -99,6 +99,26 @@ namespace Green.API.Controllers
         }
 
 
+        [HttpGet("finduser/{token}")]
+        public async Task<ActionResult<Customer>> FindCustomer(string token)
+        {
+
+            ActionResult<Customer> customer;
+
+            try
+            {
+                customer = await _repo.FindCustomerAsync(token);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                _logger.LogInformation("FindCustomer controller error");
+                return StatusCode(500);
+            }
+
+            return customer;
+        }
+
         [HttpPost("login/{id}")]
         public async Task<ActionResult<IEnumerable<Product>>> LoginUserCart(int id)
         {
@@ -127,7 +147,10 @@ namespace Green.API.Controllers
             try
             {
                 customer = await _repo.SignupUserAsync(c);
-                if (customer == null) return BadRequest(500);
+                if (customer == null) {
+                    _logger.LogError("encounter error in signupuser"); return BadRequest(500);
+                }
+                
             }
             catch (Exception e)
             {

@@ -244,41 +244,83 @@ namespace Green.Api.Data
 
         }
 
+        public async Task<ActionResult<Customer>> FindCustomerAsync(string token)
+        {
+            string cmdText = "SELECT * FROM Customers WHERE token=@token;";
+            SqlConnection connection = new(_connectionString);
+            await connection.OpenAsync();
+
+            using SqlCommand cmd = new(cmdText, connection);
+            cmd.Parameters.AddWithValue("@token", token);
+
+            Customer? c;
+            using SqlDataReader reader = await cmd.ExecuteReaderAsync();
+
+            try
+            {
+                await reader.ReadAsync();
+            }
+            catch (Exception ex)
+            {
+                // if error is that a violation of primary key error -> increment quantity -> return stat 200
+                _logger.LogError("Error in SignupUserAsync opening reader while trying to open a connection or execute non query");
+                _logger.LogInformation(ex.Message);
+                await connection.CloseAsync();
+                return new StatusCodeResult(500);
+            }
+
+            int id = reader.GetInt32(0);
+            string username = reader.GetString(1);
+            string password = reader.GetString(2);
+            string name = reader.GetString(3);
+            string address = reader.GetString(4);
+            string phone = reader.GetString(5);
+            string email = reader.GetString(6);
+            
+
+            c = new(id, username, password, name, address, phone, email, token);
+
+            await connection.CloseAsync();
+            _logger.LogInformation("Executed SignupUser");
+            return c;
+        }
 
 
+        public async Task<IEnumerable<Product>> GetCustomerInvoiceLinesAsync(int id)// doesn't get correct ammount
+        {
+            List<Product> result = new();
+
+            using SqlConnection connection = new(_connectionString);
+            await connection.OpenAsync();
+
+            string cmdText = "SELECT Products.product_id, Products.category_id, Products.product_name, Products.[description], Products.artist_id, Products.unit_price from Products join InvoiceLines on Products.product_id=InvoiceLines.product_id where customer_id=@customer_id;";
+
+            using SqlCommand cmd = new(cmdText, connection);
+
+            cmd.Parameters.AddWithValue("@customer_id", id);
+
+            using SqlDataReader reader = await cmd.ExecuteReaderAsync();
 
 
+            while (await reader.ReadAsync())
+            {
+                int productId = reader.GetInt32(0);
+                string categoryId = reader.GetString(1);
+                string productname = reader.GetString(2);
+                string description = reader.GetString(3);
+                string artistname = reader.GetString(4);
+                decimal unitprice = reader.GetDecimal(5);
 
-        //public async Task<IEnumerable<InvoiceLine>> GetAllInvoiceLinesAsync()// doesn't get correct ammount
-        //{
-        //    List<InvoiceLine> result = new();
+                Product tmpProduct = new(productId, categoryId, productname, description, artistname, unitprice);
+                result.Add(tmpProduct);
+            }
 
-        //    using SqlConnection connection = new(_connectionString);
-        //    await connection.OpenAsync();
+            await connection.CloseAsync();
 
-        //    string cmdText = "SELECT Products.product_name, quantity, amount FROM InvoiceLines JOIN Products on Products.product_id = InvoiceLines.product_id;";
+            _logger.LogInformation("Executed GetAllInvoiceLinessAsync, returned {0} results", result.Count);
 
-        //    using SqlCommand cmd = new(cmdText, connection);
-
-        //    using SqlDataReader reader = await cmd.ExecuteReaderAsync();
-
-        //    while (await reader.ReadAsync())
-        //    {
-        //        string productname =  reader.GetString(0);
-        //        int quantity = reader.GetInt32(1);
-        //        decimal totalamount = reader.GetDecimal(2);
-
-        //        InvoiceLine tmpInvoiceLine = new(productname, quantity, totalamount);
-
-        //        result.Add(tmpInvoiceLine);
-        //    }
-
-        //    await connection.CloseAsync();
-
-        //    _logger.LogInformation("Executed GetAllInvoiceLinessAsync, returned {0} results", result.Count);
-
-        //    return result;
-        //}
+            return result;
+        }
 
 
         public async Task<StatusCodeResult> InsertInvoiceLineAsync(int invoice_number, int productid, int quantity, decimal amount)
@@ -410,6 +452,9 @@ namespace Green.Api.Data
 
         public async Task<ActionResult<Customer>> SignupUserAsync(Customer customer)
         {
+            _logger.LogError(customer.ToString());
+            _logger.LogInformation(customer.ToString());
+
             string cmdText = "INSERT INTO Customers(username, password, name, address, phone, email, token) VALUES(@username, @password, @name, @address, @phone, @email, @token);";
             SqlConnection connection = new(_connectionString);
             await connection.OpenAsync();
@@ -445,7 +490,18 @@ namespace Green.Api.Data
             Customer? c;
             using SqlDataReader reader = await cmd2.ExecuteReaderAsync();
 
-            if (await reader.ReadAsync() == false) return new StatusCodeResult(500);
+            try
+            {
+                await reader.ReadAsync();
+            }
+            catch (Exception ex)
+            {
+                // if error is that a violation of primary key error -> increment quantity -> return stat 200
+                _logger.LogError("Error in SignupUserAsync opening reader while trying to open a connection or execute non query");
+                _logger.LogInformation(ex.Message);
+                await connection.CloseAsync();
+                return new StatusCodeResult(500);
+            }
             
             int id = reader.GetInt32(0);
             string username = reader.GetString(1);
