@@ -1,23 +1,29 @@
 ﻿<Properties StartupConfiguration="{38E78592-6816-4C00-874D-4BA8DADF8A54}|Default">
   <MultiItemStartupConfigurations />
-  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Green.API/Program.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Green.API/Controllers/UserController.cs">
     <Files>
-      <File FileName="Green.API/Data/SqlRepository.cs" Line="404" Column="1" IsPinned="True" />
-      <File FileName="Green.API/Controllers/UserController.cs" Line="6" Column="24" />
-      <File FileName="Green.API/Data/IRepository.cs" Line="23" Column="53" />
-      <File FileName="Green.API/Program.cs" Line="6" Column="34" />
-      <File FileName="Green.API/Controllers/SalesManagementController.cs" Line="13" Column="19" />
-      <File FileName="Green.API/Models/Customer.cs" Line="23" Column="25" />
+      <File FileName="Green.API/Data/SqlRepository.cs" Line="216" Column="1" IsPinned="True" />
+      <File FileName="Green.API/Controllers/UserController.cs" Line="58" Column="22" />
+      <File FileName="Green.API/Controllers/SalesManagementController.cs" Line="124" Column="14" />
+      <File FileName="Green.API/Data/IRepository.cs" Line="24" Column="9" />
+      <File FileName="Green.API/Program.cs" Line="6" Column="33" />
+      <File FileName="Green.API/Models/Customer.cs" Line="14" Column="28" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="Green.API" expanded="True">
             <Node name="Green.API" expanded="True">
-              <Node name="Controllers" expanded="True" />
+              <Node name="Dependencies" expanded="True">
+                <Node name="PackageDependencies" expanded="True" />
+              </Node>
+              <Node name="Controllers" expanded="True">
+                <Node name="UserController.cs" selected="True" />
+              </Node>
               <Node name="Data" expanded="True" />
               <Node name="Models" expanded="True" />
+              <Node name="Properties" expanded="True" />
+              <Node name="Services" expanded="True" />
             </Node>
           </Node>
         </State>
@@ -27,9 +33,10 @@
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
-  <MonoDevelop.Ide.ItemProperties.Green.API PreferredExecutionTarget="/Applications/Google Chrome.app" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.ItemProperties.Green.API PreferredExecutionTarget="/Applications/Google Chrome.app" />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
 </Properties>

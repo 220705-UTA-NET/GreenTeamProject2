@@ -34,7 +34,8 @@ export class AuthComponent implements OnInit {
   submitForm(form: NgForm) {
     
     const saveForm = JSON.stringify(form.value);
-    
+    const parsed = JSON.parse(saveForm);
+
     if(!form.valid) return;
     const email = form.value.email;
     const password = form.value.password;
@@ -49,28 +50,37 @@ export class AuthComponent implements OnInit {
       observe = this.authService.signup(email, password);
     }
 
+    let response;
     observe.subscribe(data => {
-      // console.log(data);
+      response = data;
+      console.log(data);
       this.loading = false;
-      
-      if(!this.loggedin) {
-        // signup
-        this.createUserDB(saveForm, data);
-      } else {
-        this.getUserInfoFromDB();
-      }
-
-      // upon login or singup, go to user cart page
-      this.router.navigate(['/cart']);
     }, error => { 
       console.log(error); 
       this.loading = false; 
       this.error = "Authentication error occurred!"
+    }, () => {
+      if("username" in parsed) {
+        // signup
+        console.log("Signing up a user");
+        this.createUserDB(saveForm, response);
+      } else {
+        console.log("Logging in a user");
+        this.getUserInfoFromDB(saveForm, response);
+      }
+
+      console.log("navigating to path");
+
+      // upon login or singup, go to user cart page
+      this.router.navigate(['/cart']);
     });
     
     form.reset();
+
+
   }
 
+    
   createUserDB(form: string, data: ResponseData) {
     const newForm = JSON.parse(form);
     console.log("form value in createuserdb:");
@@ -100,14 +110,31 @@ export class AuthComponent implements OnInit {
     this.http.post<any>('https://green-api.azurewebsites.net/User/SignupUser', body, headers).subscribe(responseData => {
       console.log(responseData);
       // this.globaluser.email = responseData.email
+
+
+
+      // add to global user
+
+
+
     }, error => {
       console.log(error);
-      
     });
   }
 
-  getUserInfoFromDB() {
+  getUserInfoFromDB(form: string, data: ResponseData) {
+    this.http.get<any>(`https://green-api.azurewebsites.net/User/finduser/${data.idToken}`).subscribe(responseData => {
+      console.log(responseData);
+      // this.globaluser.email = responseData.email
 
+
+    // add to global user
+
+
+
+    }, error => {
+      console.log(error);
+    });
   }
 
 }
