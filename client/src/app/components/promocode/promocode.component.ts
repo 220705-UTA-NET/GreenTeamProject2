@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 
+
 @Component({
-  selector: 'app-promocode',
-  templateUrl: './promocode.component.html',
-  styleUrls: ['./promocode.component.scss']
+  selector: 'app-promo',
+  templateUrl: './promo.component.html',
+  styleUrls: ['./promo.component.css']
 })
-export class PromocodeComponent implements OnInit {
+export class PromoComponent implements OnInit {
 
   constructor() { }
 
