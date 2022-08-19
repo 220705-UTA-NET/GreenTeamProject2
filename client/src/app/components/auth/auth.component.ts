@@ -32,7 +32,9 @@ export class AuthComponent implements OnInit {
   }
 
   submitForm(form: NgForm) {
-    console.log(form.value);
+    
+    const saveForm = JSON.stringify(form.value);
+    
     if(!form.valid) return;
     const email = form.value.email;
     const password = form.value.password;
@@ -48,12 +50,12 @@ export class AuthComponent implements OnInit {
     }
 
     observe.subscribe(data => {
-      console.log(data);
+      // console.log(data);
       this.loading = false;
       
       if(!this.loggedin) {
         // signup
-        this.createUserDB(form, data);
+        this.createUserDB(saveForm, data);
       } else {
         this.getUserInfoFromDB();
       }
@@ -69,7 +71,10 @@ export class AuthComponent implements OnInit {
     form.reset();
   }
 
-  createUserDB(form: NgForm, data: ResponseData) {
+  createUserDB(form: string, data: ResponseData) {
+    const newForm = JSON.parse(form);
+    console.log("form value in createuserdb:");
+    console.log(newForm);
     
     const headers = {
       headers: new HttpHeaders({
@@ -77,23 +82,27 @@ export class AuthComponent implements OnInit {
       })
     }
 
+    console.log(data.idToken);
+
     const body = {
       id: 0,
-      username: form.value.username,
-      password: form.value.password,
-      email: form.value.email,
-      name: form.value.name,
-      address: form.value.address,
-      phoneNumber: form.value.phone,
+      username: newForm.username,
+      password: newForm.password,
+      email: newForm.email,
+      name: newForm.name,
+      address: newForm.address,
+      phoneNumber: newForm.phone,
       token: data.idToken
     }
 
-    
-    this.http.post<any>('https://green-api.azurewebsites.net/User/SignupUser', JSON.stringify(body), headers).subscribe(responseData => {
+    console.log(body);
+
+    this.http.post<any>('https://green-api.azurewebsites.net/User/SignupUser', body, headers).subscribe(responseData => {
       console.log(responseData);
       // this.globaluser.email = responseData.email
     }, error => {
       console.log(error);
+      
     });
   }
 

@@ -21,7 +21,6 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { PricingComponent } from './components/pricing/pricing.component';
 import { ContactComponent } from './components/contact/contact.component';
 import { FooterComponent } from './components/footer/footer.component';
-import { PromocodeComponent } from './components/promocode/promocode.component';
 import { AboutUsComponent } from './components/about-us/about-us.component';
 import { GlobalService } from './shared/globalUser/globalUser.service';
 import { AuthService } from './components/auth/auth.service';
@@ -40,7 +39,6 @@ const appRoutes: Routes = [
   { path: 'pricing', component: PricingComponent },
   { path: 'contact', component: ContactComponent },
   { path: 'cart', component: CartComponent },
-  { path: 'promocode', component: PromocodeComponent },
   { path: 'footer', component: FooterComponent },
   { path: 'dashboard', component: DashboardComponent },
 
@@ -65,7 +63,6 @@ const appRoutes: Routes = [
     PricingComponent,
     ContactComponent,
     FooterComponent,
-    PromocodeComponent,
     AboutUsComponent
   ],
   imports: [
