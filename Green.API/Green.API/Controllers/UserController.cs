@@ -34,7 +34,7 @@ namespace Green.API.Controllers
             return Content("UserController");
         }
 
-        [HttpPost]
+        [HttpPost()]
         public async Task<int> postNum([FromBody] string s)
         {
             
