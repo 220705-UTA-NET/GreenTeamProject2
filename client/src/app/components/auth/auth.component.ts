@@ -73,7 +73,7 @@ export class AuthComponent implements OnInit {
 
   createUserDB(form: string, data: ResponseData) {
     const newForm = JSON.parse(form);
-    console.log("form value in createuserdb:")
+    console.log("form value in createuserdb:");
     console.log(newForm);
     
     const headers = {
@@ -81,6 +81,8 @@ export class AuthComponent implements OnInit {
         'Content-Type': 'application/json'
       })
     }
+
+    console.log(data.idToken);
 
     const body = {
       id: 0,
@@ -95,11 +97,12 @@ export class AuthComponent implements OnInit {
 
     console.log(body);
 
-    this.http.post<any>('https://green-api.azurewebsites.net/User/SignupUser', JSON.stringify(body), headers).subscribe(responseData => {
+    this.http.post<any>('https://green-api.azurewebsites.net/User/SignupUser', body, headers).subscribe(responseData => {
       console.log(responseData);
       // this.globaluser.email = responseData.email
     }, error => {
       console.log(error);
+      
     });
   }
 
