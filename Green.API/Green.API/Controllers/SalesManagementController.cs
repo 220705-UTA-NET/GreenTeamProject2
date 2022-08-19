@@ -86,23 +86,23 @@ namespace Green.API.Controllers
             return salesinvoices.ToList();
         }
 
-        //[HttpGet("getallinvoiceslines")]
-        //public async Task<ActionResult<IEnumerable<InvoiceLine>>> GetAllInvoiceLines()
-        //{
-        //    IEnumerable<InvoiceLine> invoicelines;
+        [HttpGet("customercart/{id}")]
+        public async Task<ActionResult<IEnumerable<Product>>> GetCustomerInvoiceLines(int id)
+        {
+            IEnumerable<Product> invoicelines;
 
-        //    try
-        //    {
-        //        invoicelines = await _repo.GetAllInvoiceLinesAsync();
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        _logger.LogError(e, e.Message);
-        //        return StatusCode(500);
-        //    }
+            try
+            {
+                invoicelines = await _repo.GetCustomerInvoiceLinesAsync(id);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, e.Message);
+                return StatusCode(500);
+            }
 
-        //    return invoicelines.ToList();
-        //}
+            return invoicelines.ToList();
+        }
 
 
         [HttpPost("{invoicedate}/{customerid}/{paymenttype}/{totalamount}")]
