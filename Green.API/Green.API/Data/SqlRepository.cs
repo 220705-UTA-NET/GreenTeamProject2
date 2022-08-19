@@ -420,36 +420,6 @@ namespace Green.Api.Data
             return result;
         }
 
-        // delete this after
-        public async Task<int> postnumasync(string s)
-        {
-            string cmdText = "INSERT INTO Temp(name) VALUES(@s);";
-            SqlConnection connection = new(_connectionString);
-            await connection.OpenAsync();
-
-
-            using SqlCommand cmd = new(cmdText, connection);
-            cmd.Parameters.AddWithValue("@s", s);
-            
-            try
-            {
-                await cmd.ExecuteNonQueryAsync();
-            }
-            catch (Exception e)
-            {
-
-                // if error is that a violation of primary key error -> increment quantity -> return stat 200
-                _logger.LogError("Error in SignupUserAsync while trying to open a connection or execute non query");
-                _logger.LogInformation(e.Message);
-                await connection.CloseAsync();
-                return -1;
-            }
-
-            return 200;
-        }
-
-
-
         public async Task<ActionResult<Customer>> SignupUserAsync(Customer customer)
         {
             _logger.LogError(customer.ToString());
