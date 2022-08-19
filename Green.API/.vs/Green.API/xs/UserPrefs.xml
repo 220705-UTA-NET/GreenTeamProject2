@@ -1,13 +1,20 @@
 ﻿<Properties StartupConfiguration="{38E78592-6816-4C00-874D-4BA8DADF8A54}|Default">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.ItemProperties.Green.API PreferredExecutionTarget="/Applications/Google Chrome.app" />
   <MultiItemStartupConfigurations />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Green.API/Controllers/UserController.cs">
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.Workbench ActiveDocument="Green.API/Data/SqlRepository.cs">
     <Files>
-      <File FileName="Green.API/Data/SqlRepository.cs" Line="216" Column="1" IsPinned="True" />
+      <File FileName="Green.API/Data/SqlRepository.cs" Line="373" Column="45" IsPinned="True" />
       <File FileName="Green.API/Controllers/UserController.cs" Line="58" Column="22" />
-      <File FileName="Green.API/Controllers/SalesManagementController.cs" Line="124" Column="14" />
+      <File FileName="Green.API/Controllers/SalesManagementController.cs" Line="131" Column="1" />
       <File FileName="Green.API/Data/IRepository.cs" Line="24" Column="9" />
       <File FileName="Green.API/Program.cs" Line="6" Column="33" />
       <File FileName="Green.API/Models/Customer.cs" Line="14" Column="28" />
+      <File FileName="Green.API/Models/Product.cs" Line="25" Column="126" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -17,10 +24,10 @@
               <Node name="Dependencies" expanded="True">
                 <Node name="PackageDependencies" expanded="True" />
               </Node>
-              <Node name="Controllers" expanded="True">
-                <Node name="UserController.cs" selected="True" />
+              <Node name="Controllers" expanded="True" />
+              <Node name="Data" expanded="True">
+                <Node name="SqlRepository.cs" selected="True" />
               </Node>
-              <Node name="Data" expanded="True" />
               <Node name="Models" expanded="True" />
               <Node name="Properties" expanded="True" />
               <Node name="Services" expanded="True" />
@@ -33,10 +40,4 @@
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
-  <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
-  </MonoDevelop.Ide.DebuggingService.Breakpoints>
-  <MonoDevelop.Ide.ItemProperties.Green.API PreferredExecutionTarget="/Applications/Google Chrome.app" />
-  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
 </Properties>
