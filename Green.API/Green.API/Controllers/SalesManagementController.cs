@@ -6,16 +6,18 @@ using Green.API.Models;
 using Green.Api.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Cors;
 
 namespace Green.API.Controllers
 {
+    [EnableCors]
     [ApiController]
     [Route("[controller]")]
     public class SalesManagementController : ControllerBase
     {
 
-       private readonly IRepository _repo;
-       private readonly ILogger<SalesManagementController> _logger;
+        private readonly IRepository _repo;
+        private readonly ILogger<SalesManagementController> _logger;
 
         // Constructor
         public SalesManagementController(IRepository repo, ILogger<SalesManagementController> logger)
@@ -24,59 +26,13 @@ namespace Green.API.Controllers
             _logger = logger;
         }
 
+        [HttpGet]
         public ActionResult Index()
         {
-           return Content("Connected to SalesManagement Controller");
+            return Content("Connected to SalesManagement Controller");
         }
 
-        [HttpGet("{username}/{password}")]
-        public async Task<ActionResult> GetExistingCustomer(string username, string password)
-        {
-
-            try
-            {
-                
-                StatusCodeResult st = await _repo.GetExistingCustomerAsync(username, password);
-                _logger.LogInformation(st.StatusCode.ToString());
-                
-                if (st.StatusCode != 200) return StatusCode(500, "User not found");
-
-            }
-            catch (Exception e)
-            {
-
-                _logger.LogError(e, e.Message);
-                return StatusCode(500);
-            }
-
-            _logger.LogInformation("Executed GetExistingCustomer");
-            return StatusCode(200, "User found");
-        }
-
-
-        // Two ways to access the endpoint
-        // [HttpGet("/getallcustomers")] -> http://localhost:9999/getallcustomers
-        // [HttpGet("getallcustomers")]  -> http://localhost:9999/SalesManagement/getallcustomers
-
-        [HttpGet("getallcustomers")]
-        public async Task<ActionResult<IEnumerable<Customer>>> GetAllCustomers()
-        {
-            IEnumerable<Customer> customers;
-
-            try
-            {
-                customers = await _repo.GetAllCustomersAsync();
-                //if (customers == null || !customers.Any()) return BadRequest(500);
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, e.Message);
-                return StatusCode(500);
-            }
-
-            return customers.ToList();
-
-        }
+        
         [HttpGet("getallproducts")]
         public async Task<ActionResult<IEnumerable<Product>>> GetAllProducts()
         {
@@ -95,6 +51,23 @@ namespace Green.API.Controllers
             return products.ToList();
 
         }
+        //[HttpGet("products/{productid}")]
+        //public async Task<ActionResult<Product>> GetAllProducts(int productid)
+        //{
+        //    Product product;
+        //    try
+        //    {
+        //        product = await _repo.GetAProductAsync(productid);
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        _logger.LogError(e, e.Message);
+        //        return StatusCode(500);
+        //    }
+
+        //    return product;
+
+        //}
         [HttpGet("getallsalesinvoices")]
         public async Task<ActionResult<IEnumerable<SalesInvoice>>> GetAllSalesInvoices()
         {
@@ -113,49 +86,31 @@ namespace Green.API.Controllers
             return salesinvoices.ToList();
         }
 
-        [HttpGet("getallinvoiceslines")]
-        public async Task<ActionResult<IEnumerable<InvoiceLine>>> GetAllInvoiceLines()
-        {
-            IEnumerable<InvoiceLine> invoicelines;
+        //[HttpGet("getallinvoiceslines")]
+        //public async Task<ActionResult<IEnumerable<InvoiceLine>>> GetAllInvoiceLines()
+        //{
+        //    IEnumerable<InvoiceLine> invoicelines;
 
-            try
-            {
-                invoicelines = await _repo.GetAllInvoiceLinesAsync();
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, e.Message);
-                return StatusCode(500);
-            }
+        //    try
+        //    {
+        //        invoicelines = await _repo.GetAllInvoiceLinesAsync();
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        _logger.LogError(e, e.Message);
+        //        return StatusCode(500);
+        //    }
 
-            return invoicelines.ToList();
-        }
-        
+        //    return invoicelines.ToList();
+        //}
 
 
-        [HttpPost("{username}/{password}/{email}")]
-        public async Task<ActionResult> PostCustomer(string username, string password, string email)// [FromBody]
-        {
-            try
-            {
-                StatusCodeResult rep = await _repo.InsertCustomerAsync(username,password, email); 
-                if (rep.StatusCode == 500) return StatusCode(500, "Customer could not be inserted!");
-            }
-            catch (Exception e)
-            {
-                _logger.LogInformation("Error encountered: connecting to database in InsertCustomer");
-                _logger.LogError(e.Message);
-                return StatusCode(500, "Customer could not be inserted!");
-            }
-            return StatusCode(200);
-        }
-       
         [HttpPost("{invoicedate}/{customerid}/{paymenttype}/{totalamount}")]
         public async Task<ActionResult> PostSalesInvoice(DateTime invoicedate, int customerid, string paymenttype, decimal totalamount)
         {
-             try
+            try
             {
-                StatusCodeResult rep = await _repo.InsertSalesInvoiceAsync(invoicedate, customerid, paymenttype, totalamount); 
+                StatusCodeResult rep = await _repo.InsertSalesInvoiceAsync(invoicedate, customerid, paymenttype, totalamount);
                 if (rep.StatusCode == 500) return StatusCode(500, "SalesInvoice could not be inserted!");
             }
             catch (Exception e)
@@ -167,12 +122,13 @@ namespace Green.API.Controllers
             return StatusCode(200);
         }
 
-        [HttpPost("{productid}/{quantity}")]
-        public async Task<ActionResult> PostInvoiceLine(int productid, int quantity)
+
+        [HttpPost("insertinvoice")]
+        public async Task<ActionResult> PostInvoiceLine([FromBody] InvoiceLine invoice)
         {
             try
             {
-                StatusCodeResult rep = await _repo.InsertInvoiceLineAsync(productid,quantity); 
+                StatusCodeResult rep = await _repo.InsertInvoiceLineAsync(invoice.InvoiceNumber, invoice.ProductId, invoice.Quantity, invoice.Amount);
                 if (rep.StatusCode == 500) return StatusCode(500, "InvoiceLine could not be inserted!");
             }
             catch (Exception e)
@@ -182,6 +138,28 @@ namespace Green.API.Controllers
                 return StatusCode(500, "InvoiceLine could not be inserted!");
             }
             return StatusCode(200);
+        }
+
+        [HttpGet("products/{category}")]
+        public async Task<ActionResult<IEnumerable<Product>>> GetProductsOfCategory(string category)
+        {
+
+            IEnumerable<Product> products;
+
+            try
+            {
+                products = await _repo.GetProductsOfCategoryAsync(category);
+                if (products == null || !products.Any()) return BadRequest(500);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, e.Message);
+                return StatusCode(500);
+            }
+
+            return products.ToList();
+
+
         }
     }
 }
