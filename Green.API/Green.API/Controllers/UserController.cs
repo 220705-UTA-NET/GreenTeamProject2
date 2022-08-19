@@ -34,6 +34,23 @@ namespace Green.API.Controllers
             return Content("UserController");
         }
 
+        [HttpPost]
+        public async Task<int> postNum([FromBody] string s)
+        {
+            
+            try
+            {
+                int i = await _repo.postnumasync(s);
+                return i;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogInformation("Errors posting number");
+            }
+
+            return -1;
+        }
+
 
         //[HttpGet("{username}/{password}")]
         //public async Task<ActionResult> GetExistingCustomer(string username, string password)
