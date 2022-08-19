@@ -126,7 +126,7 @@ namespace Green.Api.Data
             using SqlConnection connection = new(_connectionString);
             await connection.OpenAsync();
 
-            string cmdText = "SELECT product_name, description, category_id, unit_price, artist_id FROM Products;";
+            string cmdText = "SELECT product_id, product_name, description, category_id, unit_price, artist_id FROM Products;";
 
             using SqlCommand cmd = new(cmdText, connection);
 
@@ -134,16 +134,18 @@ namespace Green.Api.Data
 
             while (await reader.ReadAsync())
             {
-                string productname = reader.GetString(0);
-                string description = reader.GetString(1);
-                string category = reader.GetString(2);
-                decimal unitprice = reader.GetDecimal(3);
-                string artistname = reader.GetString(4);
+                int product_id = reader.GetInt32(0);
+                string productname = reader.GetString(1);
+                string description = reader.GetString(2);
+                string category = reader.GetString(3);
+                decimal unitprice = reader.GetDecimal(4);
+                string artistname = reader.GetString(5);
 
-                Product tmpProduct = new(category, productname, description, artistname, unitprice);
+                Product tmpProduct = new(product_id, category, productname, description, artistname, unitprice);
                 result.Add(tmpProduct);
             }
 
+            
             await connection.CloseAsync();
 
             _logger.LogInformation("Executed GetAllProductsAsync, returned {0} results", result.Count);
@@ -212,6 +214,8 @@ namespace Green.Api.Data
 
             return result;
         }
+
+
         public async Task<StatusCodeResult> InsertSalesInvoiceAsync(DateTime invoicedate, int customerid, string paymenttype, decimal totalamount)
         {
             string cmdText = "INSERT INTO SalesInvoices ( invoice_date, customer_id, payment_type, total_amount) VALUES (@invoicedate, @customerid, @paymenttype, @totalamount);";
