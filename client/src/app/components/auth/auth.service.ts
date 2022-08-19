@@ -23,7 +23,6 @@ export interface ResponseData {
 export class AuthService {
     
     firstSignup: boolean;
-    
     user = new Subject<User>();
     
     constructor(private http: HttpClient, private route: Router, private globaluser: GlobalService) {}
@@ -52,6 +51,7 @@ export class AuthService {
 
     logout() {
         this.user.next(null);
+        this.globaluser.cart = [];
         this.route.navigate(['/home']);
     }
 

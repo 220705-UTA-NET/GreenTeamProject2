@@ -19,12 +19,14 @@ export class ProductComponent implements OnInit {
 
   addToCart() {
     
-    console.log("clicked");
-    if(this.user.cart.has(this.product.id)) {
-      this.user.cart.set(this.product.id, this.user.cart.get(this.product.id) + 1);
-    } else {
-      this.user.cart.set(this.product.id, 1);
-    }
+    this.user.cart.push(this.product);
+
+    // console.log("clicked");
+    // if(this.user.cart.has(this.product.id)) {
+    //   this.user.cart.set(this.product.id, this.user.cart.get(this.product.id) + 1);
+    // } else {
+    //   this.user.cart.set(this.product.id, 1);
+    // }
     console.log(this.user.cart);
     
     // call insert invoice post request

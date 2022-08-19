@@ -1,3 +1,13 @@
+// /* You can add global styles to this file, and also import other style files */
+
+// /* Importing Bootstrap SCSS file. */
+// @import "~bootstrap/scss/bootstrap";
+
+// /* Importing Datepicker SCSS file. */
+// @import "~ngx-bootstrap/datepicker/bs-datepicker";
+
+
+
 /* You can add global styles to this file, and also import other style files */
 
 /* Importing Bootstrap SCSS file. */
@@ -5,3 +15,90 @@
 
 /* Importing Datepicker SCSS file. */
 @import "~ngx-bootstrap/datepicker/bs-datepicker";
+
+
+/* Global Styles */
+
+/* NAV BAR */
+.pl-md-4, .px-md-4 {
+    padding-left: 1.5rem !important;
+    /* background: #0f314e !important; */
+    box-shadow: 1px 4px 5px rgba(105, 97, 97, 0.806) !important;
+    font-size: 1em;
+    line-height: 1.6em;
+    /* background-image: linear-gradient(180deg,rgba(42,46,64,0) 0%,#53627c 100%),url(https://www.elegantthemes.com/layouts/wp-content/uploads/2018/12/hardware-51.jpg); */
+    /* padding-top: 160px!important; */
+    padding-right: 20px!important;
+    padding-bottom: 10px!important;
+    padding-left: 20px!important;
+    transition: padding 300ms ease 0ms;
+    -webkit-transition: all .4s ease-in-out;
+    transition: all .4s ease-in-out;
+    font-family: 'Poppins',Helvetica,Arial,Lucida,sans-serif;
+    font-weight: 600;
+}
+
+
+.btn {
+    margin-right: 0.5rem !important;
+    color: #321313!important;
+    border-color: rgba(0,0,0,0);
+    border-radius: 0px;
+    letter-spacing: 4px;
+    font-size: 10px;
+    font-family: 'Roboto',Helvetica,Arial,Lucida,sans-serif!important;
+    font-weight: 700!important;
+    text-transform: uppercase!important;
+    background-color: #00ff7f;
+    transition: all 300ms ease 0ms;
+    border-radius: 3px;
+    box-shadow: 0px 1px 2px rgb(81, 74, 74);
+
+}
+.btn:hover {
+    color: #fff!important;
+}
+
+/* GRID */
+.card {
+    margin: 10px;
+    padding: 5px;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0.125rem 0.25rem rgb(0 0 0 / 8%);
+    min-height: 12rem;
+    box-shadow: 1px 4px 5px rgb(105 97 97 / 81%) !important;
+    transition: opacity 4000ms;
+    transition-delay: 1000ms;
+}
+.cat-item, .audibook-container-card {
+    margin: 10px;
+    padding: 5px;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0.125rem 0.25rem rgb(0 0 0 / 8%);
+    min-height: 12rem;
+}
+/* Cart Button */
+
+.cat-item[_ngcontent-wsk-c19] h3 {
+    background-color: #00ff7f!important;
+    text-decoration: none;
+    background-color: transparent;
+}
+
+.h3, a {
+    transition: padding 300ms ease 0ms;
+    -webkit-transition: all .4s ease-in-out;
+    color: #333635;
+    text-decoration: none;
+    background-color: transparent;
+}
+
+.h3, a:hover{
+    transition: padding 300ms ease 0ms;
+    -webkit-transition: all .4s ease-in-out;
+    color: #878989;
+}

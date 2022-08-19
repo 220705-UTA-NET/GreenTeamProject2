@@ -11,7 +11,7 @@ export class GlobalService {
   public name: string;
   public email: string;
   public token: string;
-  public cart = new Map();
+  public cart: Product[] = [];
   
 }
 
