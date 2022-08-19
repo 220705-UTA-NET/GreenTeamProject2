@@ -7,182 +7,302 @@ using Moq;
 using SlackAPI.WebSocketMessages;
 using System.Net;
 
-namespace Controller.Test
+public class SalesManangementTest
+
 {
-    public class SalesManangementTest
+    Mock<IRepository> MockRepo = new();
 
+    Mock<ILogger<SalesManagementController>> MockLogger = new();
+
+
+    [Fact]
+    public void GetProductsPass()
     {
-        Mock<IRepository> MockRepo = new();
+        //Arrange
 
-        Mock<ILogger<SalesManagementController>> _logger = new();
+        IEnumerable<Product> products = new List<Product>();
+        MockRepo.Setup(x => x.GetAllProductsAsync()).ReturnsAsync(products);
 
+        var controller = new SalesManagementController(MockRepo.Object, MockLogger.Object);
 
-        [Fact]
-        public void GetProductsPass()
-        {
-            //Arrange
 
-            IEnumerable<Product> products = new List<Product>();
+        // Act
 
+        var result = controller.GetAllProducts();
 
-            MockRepo.Setup(x => x.GetAllProductsAsync()).ReturnsAsync(products);
 
-            var controller = new SalesManagementController(MockRepo.Object, _logger.Object);
+        // Assert
+        Assert.NotNull(result);
 
+    }
+    [Fact]
+    public void GetProduct()
+    {
+        //Arrange
 
-            // Act
 
-            var result = controller.GetAllProducts();
 
+        Product products = new Product();
 
-            // Assert
-            Assert.NotNull(result);
 
-        }
-        [Fact]
-        public void GetProduct()
-        {
-            //Arrange
 
+        int productid = 1;
+        MockRepo.Setup(x => x.GetAProductAsync(productid)).ReturnsAsync(products);
 
+        var controller = new SalesManagementController(MockRepo.Object, MockLogger.Object);
 
-            Product products = new Product();
 
+        // Act
 
+        var result = controller.GetAllProducts();
 
-            int productid = 1;
-            MockRepo.Setup(x => x.GetAProductAsync(productid)).ReturnsAsync(products);
 
-            var controller = new SalesManagementController(MockRepo.Object, _logger.Object);
+        // Assert
+        Assert.NotNull(result);
 
+    }
 
-            // Act
+    [Fact]
 
-            var result = controller.GetAllProducts(1);
+    public void GetAllSalesInvoices()
+    {
+        //Arrange
 
 
-            // Assert
-            Assert.NotNull(result);
+        IEnumerable<SalesInvoice> salesinvoices = new List<SalesInvoice>();
 
-        }
 
-        [Fact]
 
-        public void GetAllSalesInvoices()
-        {
-            //Arrange
+        MockRepo.Setup(x => x.GetAllSalesInvoicesAsync()).ReturnsAsync(salesinvoices);
 
+        var controller = new SalesManagementController(MockRepo.Object, MockLogger.Object);
 
-            IEnumerable<SalesInvoice> salesinvoices = new List<SalesInvoice>();
 
+        // Act
 
+        var result = controller.GetAllSalesInvoices();
 
-            MockRepo.Setup(x => x.GetAllSalesInvoicesAsync()).ReturnsAsync(salesinvoices);
 
-            var controller = new SalesManagementController(MockRepo.Object, _logger.Object);
+        // Assert
+        Assert.NotNull(result);
 
+    }
 
-            // Act
 
-            var result = controller.GetAllSalesInvoices();
+    [Fact]
+    public async Task PostSalesInvoices_HappyPath()
+    {
+        //Arrange
+        var time = DateTime.Now;
+        int customerid = 35;
+        string paymenttype = "bottle caps";
+        decimal totalamount = 203.23M;
 
+        MockRepo.Setup(x =>
+            x.InsertSalesInvoiceAsync(It.IsAny<DateTime>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<decimal>())
+        ).ReturnsAsync(new StatusCodeResult(200));
 
-            // Assert
-            Assert.NotNull(result);
+        var controller = new SalesManagementController(MockRepo.Object, MockLogger.Object);
 
-        }
+        // Act
+        var result = await controller.PostSalesInvoice(time, customerid, paymenttype, totalamount);
 
+        // Assert
+        Assert.NotNull(result);
+        Assert.IsType<StatusCodeResult>(result);
 
-        [Fact]
+        var objectResult = result as StatusCodeResult;
 
-        public void PostSalesInvoices()
-        {
-            //Arrange
+        Assert.Equal(200, objectResult?.StatusCode);
+    }
 
-            var time = DateTime.Now;
-            int customerid = 35;
-            string paymenttype = "bottle caps";
-            decimal totalamount = 203.23M;
+    [Fact]
+    public async Task PostSalesInvoices_WhenRepoReturns500()
+    {
+        // Arrange
+        MockRepo.Setup(x =>
+            x.InsertSalesInvoiceAsync(It.IsAny<DateTime>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<decimal>())
+        ).ReturnsAsync(new StatusCodeResult(500));
 
-            //StatusCodeResult pablo = HttpStatusCode.OK;
+        var controller = new SalesManagementController(MockRepo.Object, MockLogger.Object);
 
+        // Act
+        var result = await controller.PostSalesInvoice(default, default, default, default);
 
-            //MockRepo.Setup(x => x.InsertSalesInvoiceAsync(time, customerid, paymenttype, totalamount)).ReturnsAsync();
+        // Assert
+        Assert.NotNull(result);
+        Assert.IsType<ObjectResult>(result);
 
-            var controller = new SalesManagementController(MockRepo.Object, _logger.Object);
+        var objectResult = result as ObjectResult;
 
+        Assert.Equal(500, objectResult?.StatusCode);
+    }
 
-            // Act
+    [Fact]
+    public async Task PostSalesInvoices_WhenRepoThrowException()
+    {
+        // Arrange
+        var expectedException = new Exception("Test");
 
-            var result = controller.PostSalesInvoice(time, customerid, paymenttype, totalamount);
+        MockRepo.Setup(x =>
+            x.InsertSalesInvoiceAsync(It.IsAny<DateTime>(), It.IsAny<int>(), It.IsAny<string>(),
+                It.IsAny<decimal>())
+        ).ThrowsAsync(expectedException);
 
+        var controller = new SalesManagementController(MockRepo.Object, MockLogger.Object);
 
-            // Assert
-            Assert.NotNull(result);
+        // Act
+        var result = await controller.PostSalesInvoice(default, default, default, default);
 
-        }
+        // Assert
+        Assert.NotNull(result);
+        Assert.IsType<ObjectResult>(result);
 
-        [Fact]
+        var objectResult = result as ObjectResult;
 
-        public void PostInvoiceLine()
-        {
-            //Arrange
-            var time = DateTime.Now;
+        Assert.Equal(500, objectResult?.StatusCode);
+        Assert.Equal("SalesInvoice could not be inserted!", objectResult?.Value);
 
-            InvoiceLine invoice = null;
+        MockLogger.Verify(
+            x => x.Log(
+                It.Is<LogLevel>(l => l == LogLevel.Information),
+                It.IsAny<EventId>(),
+                It.Is<It.IsAnyType>((v, t) => true),
+                It.IsAny<Exception>(),
+                It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)));
 
+        MockLogger.Verify(
+            x => x.Log(
+                It.Is<LogLevel>(l => l == LogLevel.Error),
+                It.IsAny<EventId>(),
+                It.Is<It.IsAnyType>((v, t) => v.ToString() == expectedException.Message),
+                It.IsAny<Exception>(),
+                It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)));
+    }
 
-            //StatusCodeResult pablo = HttpStatusCode.OK;
+    [Fact]
+    public async Task PostInvoiceLine_HappyPath()
+    {
 
+        MockRepo.Setup(x =>
+            x.InsertInvoiceLineAsync(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<decimal>())
+        ).ReturnsAsync(new StatusCodeResult(200));
 
-            //MockRepo.Setup(x => x.InsertSalesInvoiceAsync(time, customerid, paymenttype, totalamount)).ReturnsAsync();
+        var controller = new SalesManagementController(MockRepo.Object, MockLogger.Object);
 
-            var controller = new SalesManagementController(MockRepo.Object, _logger.Object);
 
 
-            // Act
+        // Act
+        var result = await controller.PostInvoiceLine(new InvoiceLine(default, default, default, default));
 
-            var result = controller.PostInvoiceLine(time, invoice);
+        // Assert
+        Assert.NotNull(result);
+        Assert.IsType<StatusCodeResult>(result);
 
+        var objectResult = result as StatusCodeResult;
 
-            // Assert
-            Assert.NotNull(result);
+        Assert.Equal(200, objectResult?.StatusCode);
+    }
 
-        }
+    [Fact]
+    public async Task PostInvoiceLine_WhenRepoReturns500()
+    {
 
-        [Fact]
+        // Arrange
+        MockRepo.Setup(x =>
+           x.InsertInvoiceLineAsync(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<decimal>())
+       ).ReturnsAsync(new StatusCodeResult(500));
 
+        var controller = new SalesManagementController(MockRepo.Object, MockLogger.Object);
 
-        public void GetProductsOfCategory()
-        {
+        // Act
+        var result = await controller.PostInvoiceLine(new InvoiceLine(default, default, default, default));
 
-            //Arrange
+        // Assert
+        Assert.NotNull(result);
+        Assert.IsType<ObjectResult>(result);
 
+        var objectResult = result as ObjectResult;
 
+        Assert.Equal(500, objectResult?.StatusCode);
+    }
+    [Fact]
+    public async Task PostInvoiceLine_WhenException()
+    {
 
-            Product products = new Product();
+        // Arrange
+        var expectedException = new Exception("Test");
 
+        MockRepo.Setup(x =>
+            x.InsertInvoiceLineAsync(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>(),
+                It.IsAny<decimal>())
+        ).ThrowsAsync(expectedException);
 
+        var controller = new SalesManagementController(MockRepo.Object, MockLogger.Object);
 
-            string category = "nft";
-            //MockRepo.Setup(x => x.GetProductsOfCategoryAsync(category)).ReturnsAsync(products);
+        // Act
+        var result = await controller.PostInvoiceLine(new InvoiceLine(default, default, default, default));
 
-            var controller = new SalesManagementController(MockRepo.Object, _logger.Object);
+        // Assert
+        Assert.NotNull(result);
+        Assert.IsType<ObjectResult>(result);
 
+        var objectResult = result as ObjectResult;
 
-            // Act
+        Assert.Equal(500, objectResult?.StatusCode);
+        Assert.Equal("InvoiceLine could not be inserted!", objectResult?.Value);
 
-            var result = controller.GetProductsOfCategory(category);
+        MockLogger.Verify(
+            x => x.Log(
+                It.Is<LogLevel>(l => l == LogLevel.Information),
+                It.IsAny<EventId>(),
+                It.Is<It.IsAnyType>((v, t) => true),
+                It.IsAny<Exception>(),
+                It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)));
 
+        MockLogger.Verify(
+            x => x.Log(
+                It.Is<LogLevel>(l => l == LogLevel.Error),
+                It.IsAny<EventId>(),
+                It.Is<It.IsAnyType>((v, t) => v.ToString() == expectedException.Message),
+                It.IsAny<Exception>(),
+                It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)));
+    }
 
-            // Assert
-            Assert.NotNull(result);
 
 
 
+    [Fact]
+    public void GetProductsOfCategory()
+    {
 
-        }
+        //Arrange
+
+
+
+        Product products = new Product();
+
+
+
+        string category = "nft";
+        //MockRepo.Setup(x => x.GetProductsOfCategoryAsync(category)).ReturnsAsync(products);
+
+        var controller = new SalesManagementController(MockRepo.Object, MockLogger.Object);
+
+
+        // Act
+
+        var result = controller.GetProductsOfCategory(category);
+
+
+        // Assert
+        Assert.NotNull(result);
+
+
 
 
     }
 }
+
+
+    
